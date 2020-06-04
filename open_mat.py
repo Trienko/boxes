@@ -642,6 +642,85 @@ class BoxAnalysis():
           plt.savefig(name) # save as png
           plt.show() # display
      
+      def create_graph2(self,adj_m=[],name="All.png",c='b'):
+          import networkx as nx  
+          G=nx.DiGraph()
+          G.add_node(0),G.add_node(1),G.add_node(2),G.add_node(3),G.add_node(4),G.add_node(5),G.add_node(6),G.add_node(7),G.add_node(8),G.add_node(9),G.add_node(10),G.add_node(11),G.add_node(12),G.add_node(13),G.add_node(14)
+          for row in range(15):
+              for column in range(15):
+                  if adj_m[row,column] > 0:
+                     G.add_edge(row,column,weight=adj_m[row,column])                     
+          #nx.draw(G, pos=nx.circular_layout(G), with_labels=True, font_weight='bold')
+          #labels={}
+          #labels[0]='00'
+          #labels[1]='11'
+          #nx.draw_networkx_labels(G,pos=nx.circular_layout(G),labels,font_size=16)
+          #plt.show()
+
+          pos = nx.circular_layout(G)
+          #pos = nx.planar_layout(G)
+
+          # nodes
+          nx.draw_networkx_nodes(G,pos,
+                       nodelist=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
+                       node_color=c,
+                       node_size=600,
+                   alpha=0.9)
+          #nx.draw_networkx_nodes(G,pos,
+          #             nodelist=[4,5,6,7],
+          #             node_color='b',
+          #             node_size=500,
+          #         alpha=0.8)
+
+          # edges
+          nx.draw_networkx_edges(G,pos,width=1.0,alpha=0.5,with_labels=True)
+          nx.draw_networkx_edges(G,pos,
+                       edgelist=[(11,8),(8,12),(8,0),(0,8),(8,7),(7,8)],
+                       width=8,alpha=0.2,edge_color='r',)
+          nx.draw_networkx_edges(G,pos,
+                       edgelist=[(4,1),(1,12),(12,1),(1,0),(1,7)],
+                       width=8,alpha=0.2,edge_color='g',)
+          nx.draw_networkx_edges(G,pos,
+                       edgelist=[(13,6),(6,14),(6,0),(0,6),(5,6),(6,5)],
+                       width=8,alpha=0.2,edge_color='b',)
+          nx.draw_networkx_edges(G,pos,
+                       edgelist=[(13,2),(2,13),(2,3),(0,2),(5,2)],
+                       width=8,alpha=0.2,edge_color='y',)
+          
+          
+          #nx.draw_networkx_edges(G,pos,
+          #             edgelist=[(4,5),(5,6),(6,7),(7,4)],
+          #             width=8,alpha=0.5,edge_color='b')
+
+
+          # some math labels
+          labels={}
+          labels[0]='00'
+          labels[1]='11'
+          labels[2]='22'
+          labels[3]='010'
+          labels[4]='020'
+          labels[5]='101'
+          labels[6]='121'
+          labels[7]='202'
+          labels[8]='212'
+          labels[9]='0120'
+          labels[10]='0210'
+          labels[11]='1021'
+          labels[12]='1201'
+          labels[13]='2012'
+          labels[14]='2102'
+          
+          nx.draw_networkx_labels(G,pos,labels,font_size=10)
+          #edge_labels=dict([((u,v,),d['weight']) 
+		#for u,v,d in G.edges(data=True)])
+          #nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, label_pos=0.3, font_size=7)
+          #labels = nx.get_edge_attributes(G,'weight')
+          #nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
+
+          plt.axis('off')
+          plt.savefig(name) # save as png
+          plt.show() # display
   
    
 if __name__ == "__main__":
@@ -680,9 +759,14 @@ if __name__ == "__main__":
        
        print("******************")
    
-   print(d)
+   for key in d.keys():
+       print("******************")  
+       print(key)
+       print(d[key])
+       print("******************")
+   #print(d)
    
-   '''
+   
    mrfs = b.read_file(name="3.txt")
 
    adj_m = np.zeros((15,15),dtype=int)
@@ -724,12 +808,15 @@ if __name__ == "__main__":
        #print(b.format_output(b.factorize(s=mrf)))   
    #print(adj_m)
    #print(adj_m_group_1)
-   b.create_graph(adj_m=adj_m,name="All.png",c='b')
-   b.create_graph(adj_m=(100*b.m_div(adj_m_group_1,adj_m)).astype(int),name="Group1.png",c='r')
-   b.create_graph(adj_m=(100*b.m_div(adj_m_group_2,adj_m)).astype(int),name="Group2.png",c='g')
-   b.create_graph(adj_m=(100*b.m_div(adj_m_group_3,adj_m)).astype(int),name="Group3.png",c='y')
-   b.create_graph(adj_m=(100*b.m_div(adj_m_group_4,adj_m)).astype(int),name="Group4.png",c='c')
-   b.create_graph(adj_m=(100*b.m_div(adj_m_group_5,adj_m)).astype(int),name="Group5.png",c='m')
+   #b.create_graph(adj_m=adj_m,name="All.png",c='b')
+   #b.create_graph(adj_m=(100*b.m_div(adj_m_group_1,adj_m)).astype(int),name="Group1.png",c='r')
+
+   b.create_graph2(adj_m=(100*b.m_div(adj_m_group_1,adj_m)).astype(int),name="Group1.png",c='r')
+
+   #b.create_graph(adj_m=(100*b.m_div(adj_m_group_2,adj_m)).astype(int),name="Group2.png",c='g')
+   #b.create_graph(adj_m=(100*b.m_div(adj_m_group_3,adj_m)).astype(int),name="Group3.png",c='y')
+   #b.create_graph(adj_m=(100*b.m_div(adj_m_group_4,adj_m)).astype(int),name="Group4.png",c='c')
+   #b.create_graph(adj_m=(100*b.m_div(adj_m_group_5,adj_m)).astype(int),name="Group5.png",c='m')
 
    plt.imshow(b.m_div(adj_m_group_1,adj_m),vmin=0,vmax=1)
    plt.show()
@@ -741,7 +828,7 @@ if __name__ == "__main__":
    plt.show()
    plt.imshow(b.m_div(adj_m_group_5,adj_m),vmin=0,vmax=1)
    plt.show()
-   '''
+   
    '''
    b.zero_box_factor()
    b_factors = []
