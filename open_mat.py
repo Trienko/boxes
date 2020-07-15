@@ -16,7 +16,6 @@ class BoxAnalysis():
       #def calculate_overlapping(s1,s2):
       #    f2 = s2[0]
 
-
       def containZeroOuterBox(self,s='10101'):
           l = [idx for idx, item in enumerate(s.lower()) if '0' in item]
           #print(l)
@@ -319,7 +318,7 @@ class BoxAnalysis():
                  #final_string += outer_zero_box_letter[outer_zero_box.index(s_factors[-1])]
           #print(outer)
           outer = sorted(outer)
-          print(outer)  
+          #print(outer)  
           o_string = ""
           for k in range(len(outer)):
               o_string = o_string + "("+str(outer[k])+")"
@@ -721,18 +720,179 @@ class BoxAnalysis():
           plt.axis('off')
           plt.savefig(name) # save as png
           plt.show() # display
+
+      def perm_product(self,a,x,y):
+
+          #print a
+          #print x
+          #print y
+
+          ans = np.zeros((len(a[0,:],)),dtype=int)
+
+          x_v = a[x,:]
+          y_v = a[y,:]
+
+          #print x_v
+          #print y_v[3]
+
+          for k in range(len(x_v)):
+              ans[k] = x_v[y_v[k]]
+
+          
+
+          ans_str = ""
+          for k in range(len(ans)):
+              ans_str += str(ans[k])
+
+          #print(ans_str)
+
+          for k in range(a.shape[0]):
+              t = a[k,:]
+              t_str = ""
+              for i in range(len(t)):
+                t_str += str(t[i])
+              #print(t_str)
+              if ans_str == t_str:
+                 return k
+
+          return -1
+
+
+      def perm_table(self,a):
+          a_table = np.zeros((len(a),len(a)),dtype = int)
+
+          for k in range(len(a)):
+              for j in range(len(a)):
+                  a_table[k,j] = self.perm_product(a,k,j)
+
+          return a_table
+
   
    
 if __name__ == "__main__":
 
    b = BoxAnalysis()
+   a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
+   t = b.perm_table(a)
+
+   print(t)
+
+   '''
+   chars_c = []
+   mrfs = b.read_file(name="3.txt")
+   factored_group1 = []   
+
+
+   b_factors = []
+   for mrf in mrfs:
+       second_list,chars,final_string = b.zero_box_factor(s=mrf)
+       #print(second_list)
+       #print(chars)
+       #print(final)
+       #b_factors = b_factors+second_list
+       #b_factors = b_factors + list(set(second_list) - set(b_factors))
+       #factored_abc.append(final_string)
+   #    if not chars in chars_c:
+   #       chars_c.append(chars)
+       if "".join(sorted(final_string)) == "ABCDabcde":
+          factored_group1.append(final_string)
+   print(factored_group1)
+   factored_group1.sort()
+   print(factored_group1)
+
+   #FORMING ADJACENCY MATRIX
+   adj_m = np.zeros((9,9),dtype=int)
+   for mrf in factored_group1:
+       adj_m += b.create_adjacency_matrix(mrf=mrf)
+
+   adj_m[adj_m>0]=1
+
+   print(adj_m)
+
+   import networkx as nx  
+   import matplotlib.pyplot as plt
+
+   #PLOTTING GRAPH
+   G=nx.DiGraph()
+   G.add_node(0),G.add_node(1),G.add_node(2),G.add_node(3),G.add_node(4),G.add_node(5),G.add_node(6),G.add_node(7),G.add_node(8)
+   for row in range(9):
+       for column in range(9):
+           if adj_m[row,column] == 1:
+              G.add_edge(row,column)                     
+   pos=nx.circular_layout(G)
+   nx.draw(G, pos=pos, font_weight='bold',node_size=1000)
+   #abcdeABCD
+   # some math labels
+   labels={}
+   labels[0]='00'
+   labels[1]='010'
+   labels[2]='020'
+   labels[3]='0120'
+   labels[4]='0210'
+   labels[5]='02120'
+   labels[6]='01120'
+   labels[7]='01210'
+   labels[8]='01220'
+   nx.draw_networkx_labels(G,pos,labels,font_size=10)
+   
+   #nx.draw_networkx_edges(G,pos,
+   #                    edgelist=[(11,8),(8,12),(8,0),(0,8),(8,7),(7,8)],
+   #                    width=8,alpha=0.2,edge_color='r',)
+
+   
+
+   from pymining import seqmining
+   seqs = factored_group1#( 'caabc', 'abcb', 'cabc', 'abbca')
+   #print(seqs)
+   freq_seqs = seqmining.freq_seq_enum(seqs, 30)
+   #print(freq_seqs)
+
+   pairs = []
+
+   for s in sorted(freq_seqs):
+       #if s[1] > 30:
+       if len(s[0])==2:
+          if s[1] >= 1000:
+             pairs.append(s[0])
+             print(s)
+
+   #print(pairs)
+   '''
+   ''' 
+   s = "abcdeABCD"
+   for pair in pairs:
+       x = s.index(pair[0])
+       y = s.index(pair[1])
+       nx.draw_networkx_edges(G,pos,
+       edgelist=[(x,y)],width=8,alpha=0.2,edge_color='r',) 
+   '''
+   #plt.show()
+
+   #print(b_factors)
+   #print(len(b_factors))
+   #print(len(chars_c))
+   #print(len(mrfs))
+   '''
+
+
+   #print(b.num_outerbox_0(3))
+   #print(b.num_outerbox_0(4))
+   #print(b.num_outerbox_0(5))
+   #print(b.num_outerbox_0(6))
+
+   #print(b.num_outerbox_0(7))
+   #print(b.num_outerbox_0(8))
+
+   #print(b.num_outerbox_0(9))
+
    #b.containZeroOuterBox()
    #mrf = "012021201020121012201120021021"
    #f = b.factorize(s=mrf)
    #print(b.format_output(f))
    #print(b.zero_box_factor(mrf))
    #print(b.stickBackTogether(f))
-   
+   '''
+   '''
    mrfs = b.read_file(name="3.txt")
    d = {}
    d["02120"] = []
@@ -828,7 +988,7 @@ if __name__ == "__main__":
    plt.show()
    plt.imshow(b.m_div(adj_m_group_5,adj_m),vmin=0,vmax=1)
    plt.show()
-   
+   '''
    '''
    b.zero_box_factor()
    b_factors = []
