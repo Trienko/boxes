@@ -767,18 +767,112 @@ class BoxAnalysis():
 
           return a_table
 
-  
+      def generate_permutations(self,n=4):
+          import itertools
+          a = np.arange(n)
+          
+          permutations_object = itertools.permutations(list(a))
+          permutation_list = list(permutations_object)
+          x = np.array(permutation_list)
+          return x
+
+      def find_missing_number(self,a,n):
+          
+          for k in range(n):
+              if k not in a:
+                 return k
+          return -1
+         
+
+      def generate_one_color_ring(self,seed=np.array([0,1,2,3,4])):
+          
+          start = np.insert(seed,0,seed[-1])
+          #print(start)
+          
+          temp = np.zeros(start.shape,dtype=int)
+          first = True
+
+          inner_boxes = []
+          perm = []
+
+          #print((temp<>start).all())
+          
+          while not (temp == start).all():
+          	#generating smaller innerbox
+          	if first:
+                   temp = start[2:]
+                else:
+                   temp = temp[2:]
+          	#print(temp)
+          	temp = np.append(temp,temp[0])
+          	inner_boxes.append(temp)
+                #print(temp)
+
+          	#generating larger innerbox
+          	temp = temp[1:]
+          	#print(temp)
+          	missing_number = self.find_missing_number(temp,len(seed))
+          	temp = np.append(temp,missing_number)
+          	temp = np.append(temp,temp[0])
+                inner_boxes.append(temp)
+                perm.append(temp[1:])
+          	#print(temp)
+                first = False        
+          return inner_boxes,perm  
+
+      def generate_all_color_rings(self,n=5):
+          all_permutations = self.generate_permutations(n=n)
+          used_perm = np.zeros((len(all_permutations),),dtype=int)
+
+          while 0 in used_perm:
+
+                #first unused permutations
+                itemindex = np.where(used_perm==0)[0][0]
+                #print(itemindex)
+                inner_boxes,perm = self.generate_one_color_ring(seed=all_permutations[itemindex])
+          
+                #print color loop
+                s = ""
+                for b in inner_boxes:
+                    d_str = ""
+                    for d in b:
+                        d_str += str(d)
+                    s += d_str + "---"
+                s = s[:-3]    
+                print(s)
+                #print(inner_boxes)
+                #print(perm)
+
+                #finding the used permutations
+                for p in perm:
+                    c = 0
+                    for a in all_permutations:
+                        if (a==p).all():
+                           used_perm[c] += 1
+                           break
+                        c += 1
+          
+          print(used_perm) 
+           	
+
    
 if __name__ == "__main__":
 
    b = BoxAnalysis()
-   a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
-   a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1],[1,2,3,0],[1,3,0,2],[2,3,1,0],[2,0,3,1],[3,2,0,1],[3,0,1,2],[1,0,2,3],[2,1,0,3],[3,1,2,0],[0,2,1,3],[0,3,2,1],[0,1,3,2]])
+   #i,p = b.generate_one_color_ring()
+   #print(i)
+   #print(p)
+   b.generate_all_color_rings()
+   #x = b.generate_permutations(n=5)
+   #print(x)
+   #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
+   #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1],[1,2,3,0],[1,3,0,2],[2,3,1,0],[2,0,3,1],[3,2,0,1],[3,0,1,2],[1,0,2,3],[2,1,0,3],[3,1,2,0],[0,2,1,3],[0,3,2,1],[0,1,3,2]])
 
    #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,3,2,0],[0,3,1,2],[2,1,3,0]])
-   t = b.perm_table(a)
+   #a = np.array([[0,1,2],[1,0,2],[2,1,0],[0,2,1],[2,0,1],[1,2,0]])
+   #t = b.perm_table(a)
 
-   print(t)
+   #print(t)
 
    '''
    chars_c = []
