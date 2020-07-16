@@ -782,7 +782,51 @@ class BoxAnalysis():
               if k not in a:
                  return k
           return -1
-         
+      
+      def generate_one_cycle(self,seed=np.array([0,1,2,3]),window=4):
+          
+          
+          start = np.insert(seed,0,seed[-1])
+          print(start)
+
+          pos = len(start)-window
+          temp = start[pos:]
+          print(temp)          
+
+          #temp = np.zeros(start.shape,dtype=int)
+          #first = True
+
+          #inner_boxes = []
+          #perm = []
+
+          #print((temp<>start).all())
+          
+          #while not (temp == start).all():
+          	#generating smaller innerbox
+          #	if first:
+          #         temp = start[2:]
+          #      else:
+          #         temp = temp[2:]
+          	#print(temp)
+          #	temp = np.append(temp,temp[0])
+          #	inner_boxes.append(temp)
+                #print(temp)
+
+          	#generating larger innerbox
+          #	temp = temp[1:]
+          	#print(temp)
+          #	missing_number = self.find_missing_number(temp,len(seed))
+          #	temp = np.append(temp,missing_number)
+          #	temp = np.append(temp,temp[0])
+          #     inner_boxes.append(temp)
+          #      perm.append(temp[1:])
+          	#print(temp)
+          #      first = False        
+          #return inner_boxes,perm  
+
+
+
+   
 
       def generate_one_color_ring(self,seed=np.array([0,1,2,3,4])):
           
@@ -862,7 +906,8 @@ if __name__ == "__main__":
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
-   b.generate_all_color_rings()
+   #b.generate_all_color_rings()
+   b.generate_one_cycle()
    #x = b.generate_permutations(n=5)
    #print(x)
    #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
