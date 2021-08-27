@@ -1240,7 +1240,138 @@ class BoxAnalysis():
           plt.axis('off')
           #plt.savefig(name) # save as png
           plt.show() # display
+      
+      def next_short_box(self,box = np.array([0,1,2,3,0])):
+          temp = box
+          missing_number = self.find_missing_number(temp,len(temp))
+          temp = temp[2:]
+          temp = np.append(temp,missing_number)
+          temp = np.append(temp,temp[0])
+          return temp
 
+      def next_long_box(self,box = np.array([0,1,2,3,4,0])):
+          temp = box
+          temp = temp[1:]
+          temp = np.append(temp,temp[0])
+          return temp
+
+      def shift_ring(self,ring,k):
+          
+          temp_list = []
+          for i in range(len(ring)):
+              temp_list.append(np.zeros((len(ring[0]),),dtype=int))
+
+          for i in range(len(ring)):
+              if (k > 0):
+              	temp_list[(i+k)%len(ring)] = ring[i]
+              else:   
+                temp_list[i+k] = ring[i]
+          
+          return temp_list
+
+      def return_index(self,ring,box):
+          c = 0
+          for b in ring:
+              #print(b)
+              #print(box)
+              if len(b) == len(box):
+                 if (b==box).all():
+                    return c
+              c += 1
+          return -1
+
+      #ring 1 and ring 2 are in oposite directions
+      def find_shift_parameter(self,ring1,ring2):
+          n = max(len(ring1[0]),len(ring1[1]))
+          counter = 0          
+          for box in ring1:
+              if len(box) == n:
+                 t = self.next_long_box(box)
+              else:
+                 t = self.next_short_box(box)
+
+              k = self.return_index(ring2,t)
+              if k <> -1:
+                 return n,(counter - k)
+
+              counter += 1
+          
+          return n,n+1           
+
+      #ring1 and ring2 is in the same direction (left to right)
+      def allign_two_rings(self,ring1,ring2):
+          #reverse ring2
+          ring2 = ring2[::-1]
+          #print(ring1)
+          #print(ring2)
+          connected = np.zeros((len(ring1,)),dtype = int)
+
+          n,idx = self.find_shift_parameter(ring1,ring2)
+          #print(idx)
+
+          if (idx <= n):
+             ring2 = self.shift_ring(ring2,idx)
+             c = 0
+             for b in ring1:
+                 if len(b) == n:
+                    t = self.next_long_box(b)
+                 else:
+                    t = self.next_short_box(b)
+                 if (t==ring2[c]).all():
+                    connected[c] = 1
+                 c += 1
+
+             c = 0
+             for b in ring2:
+                 if len(b) == n:
+                    t = self.next_long_box(b)
+                 else:
+                    t = self.next_short_box(b)
+                 if (t==ring1[c]).all():
+                    connected[c] += 2
+                 c += 1
+             print("**************************************************")  
+             s = ""
+             c = 0
+             for b in ring1:
+                 d_str = ""
+                 if connected[c] == 1:
+                    d_str += "*"
+                 elif connected[c] == 2:
+                    d_str += "#"
+                 elif connected[c] == 3:
+                    d_str += "#*"
+                 
+                 for d in b:
+                     d_str += str(d)
+                 c+=1
+                 s += d_str + "--->"
+             s = s[:-4]    
+             print(s)
+
+             s = ""
+             c = 0
+             for b in ring2:
+                 d_str = ""
+                 if connected[c] == 1:
+                    d_str += "*"
+                 elif connected[c] == 2:
+                    d_str += "#"
+                 elif connected[c] == 3:
+                    d_str += "#*"
+                 
+                 for d in b:
+                     d_str += str(d)
+                 c+=1
+                 s += d_str + "<---"
+             s = s[:-4]    
+             print(s)
+             print("**************************************************")
+             return ring1,ring2      
+          return None,None
+
+       
+      '''
       def arc_plot_test(self):
           from nxviz.plots import ArcPlot
           import networkx as nx
@@ -1253,7 +1384,7 @@ class BoxAnalysis():
           a = ArcPlot(G)
           a.draw()
           plt.show()      
-
+      '''
 
 if __name__ == "__main__":
 
@@ -1261,8 +1392,9 @@ if __name__ == "__main__":
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
-   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=5)
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=6)
    #print(len(c_rings))
+   print(c_rings)
    phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
    rgb_cycle = np.vstack((            # Three sinusoids
     .5*(1.+np.cos(phi          )), # scaled to [0,1]
@@ -1274,15 +1406,27 @@ if __name__ == "__main__":
    #print(long_c)
    #print(short_c)
    c1,c2 = b.find_color(c_rings,long_c,short_c)
-   b.draw_color_cycles(c_rings,rgb_cycle)
-   b.draw_long_cycles(long_c,c1,rgb_cycle)
-   b.draw_small_cycles(short_c,c2,rgb_cycle)
+   #b.draw_color_cycles(c_rings,rgb_cycle)
+   #b.draw_long_cycles(long_c,c1,rgb_cycle)
+   #b.draw_small_cycles(short_c,c2,rgb_cycle)
    a = b.construct_adjacency_matrix(c2,c1,rgb_cycle)
-   print(a)
+   #print(a)
    plt.imshow(a)
    plt.show()
-   b.create_graph(a,rgb_cycle)
-   b.arc_plot_test()
+   #print(b.next_short_box())
+   #print(b.next_long_box())
+   #print(c_rings[0])
+   #print(b.shift_ring(c_rings[0],3))
+   #print(b.shift_ring(c_rings[0],-3))
+   #print(c_rings[0])
+   #print(c_rings[1])
+   #b.allign_two_rings(c_rings[0],c_rings[1])
+   for k in range(len(c_rings)):
+       for i in range(k+1,len(c_rings)):
+           
+           b.allign_two_rings(c_rings[k],c_rings[i])
+           
+   #b.create_graph(a,rgb_cycle)
    #print(i_n)
    #print(i_n_1)
    #b.generate_one_long_cycle()
