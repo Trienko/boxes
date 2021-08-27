@@ -573,6 +573,28 @@ class BoxAnalysis():
               
           return color_labels,unique_labels
 
+      def generate_unique_labels(self,all_shingles,mrfs,cycle_labels,depth = 4):
+          
+          unique_labels = []
+          all_shingles = np.asarray(all_shingles)
+          all_shingles = all_shingles[:depth]
+          all_shingles = all_shingles.tolist()
+          k = 0
+          for mrf in mrfs:
+              print(k)
+              shingles = self.determine_2_shingles(mrf,cycle_labels[k])
+              item = np.zeros((depth,),dtype=int)
+              item = item.tolist()
+
+              for s in shingles:
+                  if s in all_shingles:
+                     item[all_shingles.index(s)] = 1
+              if item not in unique_labels:
+                 unique_labels.append(item)    
+              k+=1
+              
+          return unique_labels
+
       def generate_color_labels_17(self,all_shingles,rgb_vector,mrfs,cycle_label,u):
           
           color_labels = np.zeros((len(mrfs),3),dtype=float)
@@ -846,7 +868,35 @@ if __name__ == "__main__":
    ax.scatter(mds_coords[:,0],mds_coords[:,1],c=y_prob,alpha=0.2)
    plt.gca().set_aspect('equal')
    plt.show()
+    
+   all_shingles = b.generate_all_shingles()
+   s_counter = b.shingle_counter(all_shingles,DNA_strings,cycle_labels)
 
+   #Sorting the shingles according to popularity
+   #########################
+   #print(all_shingles)
+   #print(s_counter)
+
+   idx = np.argsort(s_counter)
+   idx = idx[::-1]
+   all_shingles = np.asarray(all_shingles)
+   all_shingles = all_shingles[idx]
+   all_shingles = all_shingles.tolist()
+
+   s_counter = s_counter[idx]
+   import itertools
+   l = list(itertools.combinations(all_shingles, 8))
+   print(len(l))
+
+   #u = b.generate_unique_labels(all_shingles,DNA_strings,cycle_labels,depth = 8)
+   #print(u)
+   #print(len(u))
+   #print(s_counter)
+   #print(all_shingles)
+   
+
+   #########################
+   '''
    phi = np.linspace(0, 2*np.pi, 8)
    rgb_cycle = np.vstack((            # Three sinusoids
     .5*(1.+np.cos(phi          )), # scaled to [0,1]
@@ -1004,7 +1054,7 @@ if __name__ == "__main__":
    plt.show()
    
 
-   
+   '''
    
    '''
    #print(len(phi))

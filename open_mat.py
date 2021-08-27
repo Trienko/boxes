@@ -783,21 +783,37 @@ class BoxAnalysis():
                  return k
           return -1
       
-      def generate_one_cycle(self,seed=np.array([0,1,2,3]),window=4):
+      def generate_one_long_cycle(self,seed=np.array([0,1,2,3,4,0])):
           
           
-          start = np.insert(seed,0,seed[-1])
-          print(start)
+          #start = np.insert(seed,0,seed[-1])
+          start = np.array(seed)
+          #start = np.append(seed,seed[0])
+          #print(start)
 
-          pos = len(start)-window
-          temp = start[pos:]
-          print(temp)          
+          #pos = len(start)-window
+          #temp = start[pos:]
+          #print(temp) 
 
-          #temp = np.zeros(start.shape,dtype=int)
-          #first = True
+                   
 
-          #inner_boxes = []
+          temp = np.zeros(start.shape,dtype=int)
+          first = True
+
+          inner_boxes = []
           #perm = []
+
+          while not (temp == start).all(): 
+                if first: 
+                   temp = start[1:]
+                   first = False
+                else:
+                   temp = temp[1:]
+                temp = np.append(temp,temp[0])
+                #print(temp)
+                inner_boxes.append(temp)         
+          #inner_boxes = inner_boxes[:-1]
+          #print(inner_boxes)
 
           #print((temp<>start).all())
           
@@ -822,9 +838,69 @@ class BoxAnalysis():
           #      perm.append(temp[1:])
           	#print(temp)
           #      first = False        
-          #return inner_boxes,perm  
+          return inner_boxes  
 
 
+      def generate_one_short_cycle(self,seed=np.array([0,1,2,3,0])):
+                   
+          #start = np.insert(seed,0,seed[-1])
+          start = np.array(seed)
+          #start = np.append(seed,seed[0])
+          #print(start)
+
+          #pos = len(start)-window
+          #temp = start[pos:]
+          #print(temp) 
+
+                   
+
+          temp = np.zeros(start.shape,dtype=int)
+          first = True
+
+          inner_boxes = []
+          #perm = []
+
+          while not (temp == start).all(): 
+                
+                if first: 
+                   missing_number = self.find_missing_number(start,len(seed))
+                   temp = start[2:]
+                   first = False
+                else:
+                   missing_number = self.find_missing_number(temp,len(seed))
+                   temp = temp[2:]
+
+                temp = np.append(temp,missing_number)
+                temp = np.append(temp,temp[0])
+                #print(temp)
+                inner_boxes.append(temp)         
+          #inner_boxes = inner_boxes[:-1]
+          #print(inner_boxes)
+
+          #print((temp<>start).all())
+          
+          #while not (temp == start).all():
+          	#generating smaller innerbox
+          #	if first:
+          #         temp = start[2:]
+          #      else:
+          #         temp = temp[2:]
+          	#print(temp)
+          #	temp = np.append(temp,temp[0])
+          #	inner_boxes.append(temp)
+                #print(temp)
+
+          	#generating larger innerbox
+          #	temp = temp[1:]
+          	#print(temp)
+          #	missing_number = self.find_missing_number(temp,len(seed))
+          #	temp = np.append(temp,missing_number)
+          #	temp = np.append(temp,temp[0])
+          #     inner_boxes.append(temp)
+          #      perm.append(temp[1:])
+          	#print(temp)
+          #      first = False        
+          return inner_boxes  
 
    
 
@@ -867,17 +943,24 @@ class BoxAnalysis():
       def generate_all_color_rings(self,n=5):
           all_permutations = self.generate_permutations(n=n)
           used_perm = np.zeros((len(all_permutations),),dtype=int)
-
+          inner_boxes_n = []
+          inner_boxes_n_p_1 = []
+          c_rings = []
           while 0 in used_perm:
 
                 #first unused permutations
                 itemindex = np.where(used_perm==0)[0][0]
                 #print(itemindex)
                 inner_boxes,perm = self.generate_one_color_ring(seed=all_permutations[itemindex])
-          
+                c_rings.append(inner_boxes) 
                 #print color loop
                 s = ""
                 for b in inner_boxes:
+                    if len(b) == n:
+                       inner_boxes_n.append(b.tolist())
+                    else:
+                       inner_boxes_n_p_1.append(b.tolist())
+
                     d_str = ""
                     for d in b:
                         d_str += str(d)
@@ -897,17 +980,313 @@ class BoxAnalysis():
                         c += 1
           
           print(used_perm) 
-           	
+          print(len(all_permutations)) 
+          return inner_boxes_n,inner_boxes_n_p_1,c_rings
+      
+      def generate_all_long_cycles(self,long_boxes):
+          #all_permutations = self.generate_permutations(n=n)
+          used_boxes = np.zeros((len(long_boxes),),dtype=int)
+          long_c = []
+          while 0 in used_boxes:
 
-   
+                #first unused permutations
+                itemindex = np.where(used_boxes==0)[0][0]
+                #print(itemindex)
+                inner_boxes = self.generate_one_long_cycle(seed=long_boxes[itemindex])
+                long_c.append(inner_boxes)
+                #print color loop
+                s = ""
+                for b in inner_boxes:
+                    d_str = ""
+                    for d in b:
+                        d_str += str(d)
+                    s += d_str + "---"
+                s = s[:-3]    
+                print(s)
+                #print(inner_boxes)
+                #print(perm)
+
+                #finding the used permutations
+                for p in inner_boxes:
+                    c = 0
+                    for a in long_boxes:
+                        if (a==p).all():
+                           used_boxes[c] += 1
+                           break
+                        c += 1
+          
+          print(used_boxes) 
+          print(len(long_boxes)) 
+          return long_c
+ 
+      def find_color(self,c_rings,long_c,short_c):
+         
+          long_c_col = np.zeros((len(long_c),len(long_c[0])),dtype=int)
+          short_c_col = np.zeros((len(short_c),len(short_c[0])),dtype=int)
+          
+          #print(c_rings)
+          #print(long_c)
+          #print(short_c)
+          #c_rings_a = np.array((len(c_rings),len(c_rings[0])),dtype         
+          #print(c_rings[0])
+          #print(long_c[0])
+          for k in range(len(long_c)):
+              counter = 0
+              for box1 in long_c[k]:
+                  for i in range(len(c_rings)):
+                      for box2 in c_rings[i]:
+                          if np.array_equal(box1,box2):
+                             long_c_col[k,counter] = i
+                  counter += 1 
+
+          for k in range(len(short_c)):
+              counter = 0
+              for box1 in short_c[k]:
+                  for i in range(len(c_rings)):
+                      for box2 in c_rings[i]:
+                          if np.array_equal(box1,box2):
+                             short_c_col[k,counter] = i
+                  counter += 1 
+
+          return long_c_col,short_c_col 
+
+          #print(long_c_col)
+          #print(short_c_col)
+          
+          #for r in long_c:
+          #    t = np.zeros(len(r,),dtype=int)
+          #    for b in r:
+          #        counter1 = 0
+          #        for c in c_rings:
+          #            counter2 = 0
+          #            for i in c:
+          #                if (i==b).all():   
+          #                   t[counter] =
+
+          return short_c_col, long_c_col
+              
+
+      def generate_all_short_cycles(self,short_boxes):
+          #all_permutations = self.generate_permutations(n=n)
+          used_boxes = np.zeros((len(short_boxes),),dtype=int)
+          short_c = []
+          while 0 in used_boxes:
+
+                #first unused permutations
+                itemindex = np.where(used_boxes==0)[0][0]
+                #print(itemindex)
+                inner_boxes = self.generate_one_short_cycle(seed=short_boxes[itemindex])
+                short_c.append(inner_boxes) 
+                #print color loop
+                s = ""
+                for b in inner_boxes:
+                    d_str = ""
+                    for d in b:
+                        d_str += str(d)
+                    s += d_str + "---"
+                s = s[:-3]    
+                print(s)
+                #print(inner_boxes)
+                #print(perm)
+
+                #finding the used permutations
+                for p in inner_boxes:
+                    c = 0
+                    for a in short_boxes:
+                        if (a==p).all():
+                           used_boxes[c] += 1
+                           break
+                        c += 1
+          
+          print(used_boxes) 
+          print(len(short_boxes)) 
+          return short_c
+          #return inner_boxes_n,inner_boxes_n_p_1
+
+      def create_str(self,ar):
+          s = ""
+          for a in ar:
+              s += str(a)
+
+          return s
+
+      def draw_color_cycles(self,c_rings,rgb_cycle):
+          counter = 0
+          x_c = 0
+          y_c = 0
+          step = 1
+          c_counter = 0
+          #counter_x = 0
+          #counter_y = 0
+          for ring in c_rings:
+              for box in ring:
+                  plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
+                  plt.scatter(x_c,y_c,c=rgb_cycle[c_counter],s=150,edgecolors='k')
+                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/4.0, y_c+step/3.0, str(c_counter), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                  
+                  x_c += step
+              y_c += step
+              x_c = 0
+              c_counter += 1
+          plt.show() 
+
+      def draw_long_cycles(self,long_c,cl,rgb_cycle):
+          counter = 0
+          x_c = 0
+          y_c = 0
+          step = 1
+          c_counter_x = 0
+          c_counter_y = 0
+          #counter_x = 0
+          #counter_y = 0
+          print(cl)
+          for ring in long_c:
+              for box in ring:
+                  plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
+                  plt.scatter(x_c,y_c,c=rgb_cycle[cl[c_counter_y,c_counter_x]],s=150,edgecolors='k')
+                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/8.0, y_c+step/3.0, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                 
+                  c_counter_x += 1
+                  x_c += step
+              y_c += step
+              c_counter_y += 1
+              c_counter_x = 0
+              x_c = 0
+              
+          plt.show() 
+
+      def draw_small_cycles(self,short_c,cl,rgb_cycle):
+          counter = 0
+          x_c = 0
+          y_c = 0
+          step = 1
+          c_counter_x = 0
+          c_counter_y = 0
+          #counter_x = 0
+          #counter_y = 0
+          print(cl)
+          for ring in short_c:
+              for box in ring:
+                  plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
+                  plt.scatter(x_c,y_c,c=rgb_cycle[cl[c_counter_y,c_counter_x]],s=150,edgecolors='k')
+                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/8.0, y_c+step/3.0, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                 
+                  c_counter_x += 1
+                  x_c += step
+              y_c += step
+              c_counter_y += 1
+              c_counter_x = 0
+              x_c = 0
+              
+          plt.show() 
+
+
+      def construct_adjacency_matrix(self,short_ring,long_ring,rgb_cycle):
+          adj_matrix = np.zeros((len(rgb_cycle)-2,len(rgb_cycle)-2),dtype=int)
+
+          for row in range(short_ring.shape[0]):
+              for column in range(short_ring.shape[1]):
+                  print(column)
+                  if column <> short_ring.shape[1]-1:
+                     adj_matrix[short_ring[row,column],short_ring[row,column+1]] +=1
+                  else:
+                     adj_matrix[short_ring[row,column],short_ring[row,0]] += 1
+
+          for row in range(long_ring.shape[0]):
+              for column in range(long_ring.shape[1]):
+                  if column <> long_ring.shape[1]-1:
+                     adj_matrix[long_ring[row,column],long_ring[row,column+1]] +=1
+                  else:
+                     adj_matrix[long_ring[row,column],long_ring[row,0]] += 1
+          return adj_matrix 
+
+
+      def create_graph(self,adj_m,rgb_cycle):
+          import networkx as nx  
+          G=nx.DiGraph()
+
+          for k in range(adj_m.shape[0]):
+              G.add_node(k)
+  
+          for row in range(adj_m.shape[0]):
+              for column in range(adj_m.shape[1]):
+                  if adj_m[row,column] > 0:
+                     G.add_edge(row,column)  
+          
+          #pos = nx.fruchterman_reingold_layout(G)
+          #pos = nx.fruchterman_reingold_layout(G)
+          pos = nx.spectral_layout(G)
+          print(pos)
+          #pos = nx.spring_layout(G)
+          #pos = nx.spring_layout(G)
+          #pos = nx.kamada_kawai_layout(G)
+          #pos = nx.planar_layout(G)
+          #pos = nx.circular_layout(G)
+          nx.draw_networkx_nodes(G,pos,nodelist=[i for i in range(adj_m.shape[0])], node_color = rgb_cycle, node_size=200, alpha=0.9)
+          nx.draw_networkx_edges(G,pos,width=1.0,alpha=0.5)
+          
+          labels={}
+          for k in range(adj_m.shape[0]):
+              labels[k]=str(k)
+          nx.draw_networkx_labels(G,pos,labels,font_size=10)
+ 
+          #pos = nx.circular_layout(G)
+          #pos = nx.planar_layout(G)
+
+         
+          plt.axis('off')
+          #plt.savefig(name) # save as png
+          plt.show() # display
+
+      def arc_plot_test(self):
+          from nxviz.plots import ArcPlot
+          import networkx as nx
+          import matplotlib.pyplot as plt
+
+          er = nx.erdos_renyi_graph(30, 0.3)
+          nx.draw(er)
+          plt.show()
+ 
+          a = ArcPlot(G)
+          a.draw()
+          plt.show()      
+
+
 if __name__ == "__main__":
 
    b = BoxAnalysis()
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
-   #b.generate_all_color_rings()
-   b.generate_one_cycle()
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=5)
+   #print(len(c_rings))
+   phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
+   rgb_cycle = np.vstack((            # Three sinusoids
+    .5*(1.+np.cos(phi          )), # scaled to [0,1]
+    .5*(1.+np.cos(phi+2*np.pi/3)), # 120 phase shifted.
+    .5*(1.+np.cos(phi-2*np.pi/3)))).T # Shape = (54,3)
+   #print(len(rgb_cycle))
+   long_c = b.generate_all_long_cycles(i_n_1)
+   short_c = b.generate_all_short_cycles(i_n)
+   #print(long_c)
+   #print(short_c)
+   c1,c2 = b.find_color(c_rings,long_c,short_c)
+   b.draw_color_cycles(c_rings,rgb_cycle)
+   b.draw_long_cycles(long_c,c1,rgb_cycle)
+   b.draw_small_cycles(short_c,c2,rgb_cycle)
+   a = b.construct_adjacency_matrix(c2,c1,rgb_cycle)
+   print(a)
+   plt.imshow(a)
+   plt.show()
+   b.create_graph(a,rgb_cycle)
+   b.arc_plot_test()
+   #print(i_n)
+   #print(i_n_1)
+   #b.generate_one_long_cycle()
+   #b.generate_one_short_cycle()
    #x = b.generate_permutations(n=5)
    #print(x)
    #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
