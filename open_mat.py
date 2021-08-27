@@ -1299,9 +1299,10 @@ class BoxAnalysis():
           return n,n+1           
 
       #ring1 and ring2 is in the same direction (left to right)
-      def allign_two_rings(self,ring1,ring2):
+      def allign_two_rings(self,ring1,ring2,rs1=0,rs2=0,rev=True):
           #reverse ring2
-          ring2 = ring2[::-1]
+          if rev:
+             ring2 = ring2[::-1]
           #print(ring1)
           #print(ring2)
           connected = np.zeros((len(ring1,)),dtype = int)
@@ -1345,7 +1346,10 @@ class BoxAnalysis():
                  for d in b:
                      d_str += str(d)
                  c+=1
-                 s += d_str + "--->"
+                 if rs1%2 == 0:
+                    s += d_str + "--->"
+                 else:
+                    s += d_str + "<---"
              s = s[:-4]    
              print(s)
 
@@ -1363,7 +1367,10 @@ class BoxAnalysis():
                  for d in b:
                      d_str += str(d)
                  c+=1
-                 s += d_str + "<---"
+                 if rs2%2 == 0:
+                    s += d_str + "--->"
+                 else:
+                    s += d_str + "<---"
              s = s[:-4]    
              print(s)
              print("**************************************************")
@@ -1392,7 +1399,7 @@ if __name__ == "__main__":
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
-   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=6)
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=4)
    #print(len(c_rings))
    print(c_rings)
    phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
@@ -1423,9 +1430,31 @@ if __name__ == "__main__":
    #b.allign_two_rings(c_rings[0],c_rings[1])
    for k in range(len(c_rings)):
        for i in range(k+1,len(c_rings)):
-           
            b.allign_two_rings(c_rings[k],c_rings[i])
-           
+   #print("hallo1")
+   e_matrix = np.zeros((a.shape),dtype=int)
+   ring_state = np.zeros((len(c_rings),),dtype=int)
+   #ring_state[0] = 1
+   print(a)
+   #MAJOR BUG
+   for k in range(len(c_rings)):
+       for i in range(k+1,len(c_rings)):
+           if a[k,i] > 0:
+              #print("hallo")
+              ring1 = c_rings[k]
+              ring2 = c_rings[i]
+              if ((ring_state[k]%2) == (ring_state[i]%2)):
+                 ring2 = ring2[::-1]
+                 c_rings[i] = ring2
+                 if (ring_state[i] <> 0):
+                    e_matrix[k,i] = 1
+                    e_matrix[i,k] = 1
+                 ring_state[i] += 1
+              if e_matrix[k,i] == 1:
+                 print("ERROR")
+              b.allign_two_rings(ring1,ring2,ring_state[k],ring_state[i],rev=False)
+   plt.imshow(a+e_matrix) 
+   plt.show()       
    #b.create_graph(a,rgb_cycle)
    #print(i_n)
    #print(i_n_1)
