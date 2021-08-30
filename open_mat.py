@@ -1303,6 +1303,7 @@ class BoxAnalysis():
           #reverse ring2
           if rev:
              ring2 = ring2[::-1]
+             rs2 += 1
           #print(ring1)
           #print(ring2)
           connected = np.zeros((len(ring1,)),dtype = int)
@@ -1346,7 +1347,7 @@ class BoxAnalysis():
                  for d in b:
                      d_str += str(d)
                  c+=1
-                 if rs1%2 == 0:
+                 if rs1%2 <> 0:
                     s += d_str + "--->"
                  else:
                     s += d_str + "<---"
@@ -1367,7 +1368,7 @@ class BoxAnalysis():
                  for d in b:
                      d_str += str(d)
                  c+=1
-                 if rs2%2 == 0:
+                 if rs2%2 <> 0:
                     s += d_str + "--->"
                  else:
                     s += d_str + "<---"
@@ -1377,7 +1378,58 @@ class BoxAnalysis():
              return ring1,ring2      
           return None,None
 
-       
+      def find_neighbours(self,adj_m,node):
+
+          row = adj_m[node,:]
+
+          neighbours = []
+          counter = 0
+          for n in row:
+              if n > 0:
+                 neighbours.append(counter)
+              counter += 1
+          
+          return neighbours
+          
+
+      def find_all_connections_c_rings(self,adj_m,c_rings):
+          ringstate = np.zeros((adj_m.shape[0],),dtype=int)
+          neighbours = [0]
+          ringstate[0] = 1
+
+          while len(neighbours) <> 0:
+                node = neighbours.pop(0)
+                new_neighbours = self.find_neighbours(adj_m,node)
+                for n in new_neighbours:
+                    if ringstate[n] == 0:
+                       if ringstate[node] == 1:
+                          ringstate[n] = 2
+                          r = c_rings[n]
+                          r = r[::-1]
+                          c_rings[n] = r
+                       else:
+                          ringstate[n] = 1
+                       neighbours.append(n)
+
+          return ringstate,c_rings 
+
+
+      def print_all_connections(self,adj_m,ringstate,c_rings):
+          e_matrix = np.zeros(adj_m.shape,dtype=int)
+
+          for i in range(adj_m.shape[0]):
+              for k in range(i+1,adj_m.shape[0]):
+                  if adj_m[i,k] > 0:
+                     if ringstate[i] == ringstate[k]:
+                        e_matrix[i,k] = 1
+                        e_matrix[k,i] = 1
+                        print("Error")
+                        self.allign_two_rings(c_rings[i],c_rings[k],rs1=ringstate[i],rs2=ringstate[k],rev=True)
+                     else:
+                        self.allign_two_rings(c_rings[i],c_rings[k],rs1=ringstate[i],rs2=ringstate[k],rev=False)
+
+          return e_matrix                                                        
+          
       '''
       def arc_plot_test(self):
           from nxviz.plots import ArcPlot
@@ -1399,7 +1451,7 @@ if __name__ == "__main__":
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
-   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=4)
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=5)
    #print(len(c_rings))
    print(c_rings)
    phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
@@ -1428,6 +1480,12 @@ if __name__ == "__main__":
    #print(c_rings[0])
    #print(c_rings[1])
    #b.allign_two_rings(c_rings[0],c_rings[1])
+   rs,c_rings = b.find_all_connections_c_rings(a,c_rings)
+   print(rs)
+   e = b.print_all_connections(a,rs,c_rings)
+   plt.imshow(e+a)
+   plt.show()
+   '''
    for k in range(len(c_rings)):
        for i in range(k+1,len(c_rings)):
            b.allign_two_rings(c_rings[k],c_rings[i])
@@ -1454,7 +1512,8 @@ if __name__ == "__main__":
                  print("ERROR")
               b.allign_two_rings(ring1,ring2,ring_state[k],ring_state[i],rev=False)
    plt.imshow(a+e_matrix) 
-   plt.show()       
+   plt.show()
+   '''       
    #b.create_graph(a,rgb_cycle)
    #print(i_n)
    #print(i_n_1)
