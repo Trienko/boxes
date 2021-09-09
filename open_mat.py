@@ -1110,28 +1110,42 @@ class BoxAnalysis():
 
           return s
 
-      def draw_color_cycles(self,c_rings,rgb_cycle):
+      def draw_color_cycles(self,c_rings,rgb_cycle,cosets,p_cycle,l,step = 1, c1=3.0, c2=8.0, c3=4.0):
           counter = 0
           x_c = 0
           y_c = 0
           step = 1
           c_counter = 0
-          #counter_x = 0
-          #counter_y = 0
+          c_counter_x = 0
+          c_counter_y = 0
           for ring in c_rings:
               for box in ring:
                   plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
                   plt.scatter(x_c,y_c,c=rgb_cycle[c_counter],s=150,edgecolors='k')
-                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
-                  plt.text(x_c-step/4.0, y_c+step/3.0, str(c_counter), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c, y_c+step/c1, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/c2, y_c+step/c1, str(c_counter), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
                   
+                  if c_counter_x <> 0:
+
+                     if len(l) == 0:
+                        plt.text(x_c-step/c3, y_c+step/c1, str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                     else:
+                        plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                  else:
+                        if len(l) == 0:
+                           plt.text(x_c-step/c3, y_c+step/c1, str(p_cycle[c_counter_y])+":"+str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                        else:
+                           plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[p_cycle[c_counter_y]])+":"+self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                  c_counter_x += 1
                   x_c += step
               y_c += step
               x_c = 0
               c_counter += 1
+              c_counter_y += 1
+              c_counter_x = 0  
           plt.show() 
 
-      def draw_long_cycles(self,long_c,cl,rgb_cycle):
+      def draw_long_cycles(self,long_c,cl,rgb_cycle,cosets,p_cycle,l,step = 1, c1=3.0, c2=8.0, c3=4.0):
           counter = 0
           x_c = 0
           y_c = 0
@@ -1145,8 +1159,20 @@ class BoxAnalysis():
               for box in ring:
                   plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
                   plt.scatter(x_c,y_c,c=rgb_cycle[cl[c_counter_y,c_counter_x]],s=150,edgecolors='k')
-                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
-                  plt.text(x_c-step/8.0, y_c+step/3.0, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c, y_c+step/c1, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/c2, y_c+step/c1, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                  
+                  if c_counter_x <> 0:
+
+                     if len(l) == 0:
+                        plt.text(x_c-step/c3, y_c+step/c1, str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                     else:
+                        plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                  else:
+                        if len(l) == 0:
+                           plt.text(x_c-step/c3, y_c+step/c1, str(p_cycle[c_counter_y])+":"+str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                        else:
+                           plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[p_cycle[c_counter_y]])+":"+self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
                  
                   c_counter_x += 1
                   x_c += step
@@ -1157,11 +1183,18 @@ class BoxAnalysis():
               
           plt.show() 
 
-      def draw_small_cycles(self,short_c,cl,rgb_cycle):
+      def to_latex(self,s):
+          if len(s) > 1:
+             return '$\\'+s+'$'
+          else:
+             return '$'+s+'$'
+                
+
+      def draw_small_cycles(self,short_c,cl,rgb_cycle,cosets,p_cycle,l,step = 1, c1=3.0, c2=8.0, c3=4.0):
           counter = 0
           x_c = 0
           y_c = 0
-          step = 1
+          #step = 1
           c_counter_x = 0
           c_counter_y = 0
           #counter_x = 0
@@ -1171,9 +1204,21 @@ class BoxAnalysis():
               for box in ring:
                   plt.annotate('',ha = 'center', va = 'bottom',xytext = (x_c, y_c),xy = (x_c+step, y_c),arrowprops=dict(facecolor='black', shrink=0.08, width=1,mutation_scale=50,headwidth=5)) 
                   plt.scatter(x_c,y_c,c=rgb_cycle[cl[c_counter_y,c_counter_x]],s=150,edgecolors='k')
-                  plt.text(x_c, y_c+step/3.0, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
-                  plt.text(x_c-step/8.0, y_c+step/3.0, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
-                 
+                  plt.text(x_c, y_c+step/c1, self.create_str(box), size=8, zorder=5, color='w',bbox={'facecolor': 'blue', 'alpha': 0.5, 'pad': 1}) 
+                  plt.text(x_c-step/c2, y_c+step/c1, str(cl[c_counter_y,c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'red', 'alpha': 0.5, 'pad': 1}) 
+                  
+                  if c_counter_x <> 0:
+
+                     if len(l) == 0:
+                        plt.text(x_c-step/c3, y_c+step/c1, str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                     else:
+                        plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                  else:
+                        if len(l) == 0:
+                           plt.text(x_c-step/c3, y_c+step/c1, str(p_cycle[c_counter_y])+":"+str(cosets[c_counter_y][c_counter_x]), size=8, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+                        else:
+                           plt.text(x_c-step/c3, y_c+step/c1, self.to_latex(l[p_cycle[c_counter_y]])+":"+self.to_latex(l[cosets[c_counter_y][c_counter_x]]), size=10, zorder=5, color='w',bbox={'facecolor': 'green', 'alpha': 0.5, 'pad': 1})
+
                   c_counter_x += 1
                   x_c += step
               y_c += step
@@ -1428,8 +1473,124 @@ class BoxAnalysis():
                      else:
                         self.allign_two_rings(c_rings[i],c_rings[k],rs1=ringstate[i],rs2=ringstate[k],rev=False)
 
-          return e_matrix                                                        
+          return e_matrix 
+
+
+      def find_index(self,ans,a):
+          ans_str = ""
+          for k in range(len(ans)):
+              ans_str += str(ans[k])
+
+          #print(ans_str)
+
+          for k in range(a.shape[0]):
+              t = a[k,:]
+              t_str = ""
+              for i in range(len(t)):
+                t_str += str(t[i])
+              #print(t_str)
+              if ans_str == t_str:
+                 return k
+          return -1;
+
+      def calculate_permutation_between_boxes(self,b1,b2,p,n=4):
+          #print("***********")
+          #print(n)
+          #print(b1)
+          #print(b2)
+          #print("***********")
+          perm_answ = np.zeros((n,),dtype=int)
+          if len(b1) == n+1:
+             for k in range(n):
+                 #print(k)
+                 perm_answ[b1[k]] = b2[k]
+          else:
+             not_in_b1 = self.find_missing_number(b1,n)
+             not_in_b2 = self.find_missing_number(b2,n)
+             
+             for k in range(n-1):
+                 perm_answ[b1[k]] = b2[k]
+             perm_answ[not_in_b1] = not_in_b2
+             #print(perm_answ)
+          return self.find_index(perm_answ,p)
+                                              
+      def convert_short_long_cycle_to_coset(self,cycle,p,p_table,n=4,longc=True):
+          if longc:
+             iota = np.arange(n+1)
+          else:
+             iota = np.arange(n)
+
+          iota[-1] = iota[0]
+          coset = np.zeros((len(cycle),),dtype=int)
+
+          first_perm = self.calculate_permutation_between_boxes(iota,cycle[0],p,n=n)
+          cycle_perm = self.calculate_permutation_between_boxes(cycle[0],cycle[1],p,n=n)
+
+          for k in range(len(coset)):
+              if k == 0:
+                 coset[k] = first_perm
+              else:
+                 coset[k] = p_table[cycle_perm,coset[k-1]]
+
+          return coset,cycle_perm     
           
+      def convert_all_short_long_cycles_to_cosets(self,cycles,p,p_table,n=4,labels=[],longc=True):
+          #all_permutations = self.generate_permutations(n=n)
+          #used_boxes = np.zeros((len(short_boxes),),dtype=int)
+          cosets = []
+          cycle_permutation = []
+
+          for c in cycles:
+              cos,p_value = self.convert_short_long_cycle_to_coset(c,p,p_table,n=n,longc=longc)
+              cosets.append(cos)
+              cycle_permutation.append(p_value)
+              
+              s1 = ""
+              s2 = ""
+              for e in cos:
+                  s1 += str(e) + "---"
+                  if len(labels) <> 0:
+                     s2 += labels[e] + "---"
+
+              print(s1[:-3])
+              if len(s2) <> 0:
+                 print(s2[:-3])
+
+          return cosets,cycle_permutation
+      
+      def convert_all_color_cycles_to_cosets(self,cycles,p,p_table,n=4,labels=[]):
+          #all_permutations = self.generate_permutations(n=n)
+          #used_boxes = np.zeros((len(short_boxes),),dtype=int)
+
+          cosets = []
+          cycle_permutation = []
+          
+
+          for c in cycles:
+              c_s = c[0::2]
+              c_l = c[1::2]
+              #print(c)
+              t = c[:]
+              cos_s,p_value = self.convert_short_long_cycle_to_coset(c_s,p,p_table,n=n,longc=False)
+              cos_l,p_value = self.convert_short_long_cycle_to_coset(c_l,p,p_table,n=n,longc=True)
+              t[0::2] = cos_s
+              t[1::2] = cos_l
+              cosets.append(t)
+              cycle_permutation.append(p_value)
+              
+              s1 = ""
+              s2 = ""
+              for e in t:
+                  s1 += str(e) + "---"
+                  if len(labels) <> 0:
+                     s2 += labels[e] + "---"
+
+              print(s1[:-3])
+              if len(s2) <> 0:
+                 print(s2[:-3])
+
+          return cosets,cycle_permutation
+             
       '''
       def arc_plot_test(self):
           from nxviz.plots import ArcPlot
@@ -1451,7 +1612,61 @@ if __name__ == "__main__":
    #i,p = b.generate_one_color_ring()
    #print(i)
    #print(p)
+   
+   #labels = ["iota","gamma","alpha","B","A","beta"] #for n = 3
+   #labels = ["iota","p","n","theta","eta","o","k","y","delta","A","B","zeta","beta","D","l","epsilon","z","C","F","alpha","gamma","m","E","x"] #for n = 4
+   labels = []
+   x = b.generate_permutations(n=5)
+   x = np.array(x)
+   print(x)
+   t = b.perm_table(x)
+   print(t)
    i_n,i_n_1,c_rings = b.generate_all_color_rings(n=5)
+   long_c = b.generate_all_long_cycles(i_n_1)
+   short_c = b.generate_all_short_cycles(i_n)
+   #c,p = b.convert_short_long_cycle_to_coset(long_c[1],x,t,n=3)
+   #b.convert_all_short_long_cycles_to_cosets(long_c,x,t,n=3,labels=labels)
+   #print(short_c)
+   s_cosets,s_p = b.convert_all_short_long_cycles_to_cosets(short_c,x,t,n=5,labels=labels,longc=False)   
+   l_cosets,l_p = b.convert_all_short_long_cycles_to_cosets(long_c,x,t,n=5,labels=labels,longc=True)
+   c_cosets,c_p = b.convert_all_color_cycles_to_cosets(c_rings,x,t,n=5,labels=labels)   
+   
+   phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
+   rgb_cycle = np.vstack((            # Three sinusoids
+    .5*(1.+np.cos(phi          )), # scaled to [0,1]
+    .5*(1.+np.cos(phi+2*np.pi/3)), # 120 phase shifted.
+    .5*(1.+np.cos(phi-2*np.pi/3)))).T # Shape = (54,3)
+
+   c1,c2 = b.find_color(c_rings,long_c,short_c)
+   b.draw_color_cycles(c_rings,rgb_cycle,c_cosets,c_p,labels)
+   b.draw_long_cycles(long_c,c1,rgb_cycle,l_cosets,l_p,labels)
+   b.draw_small_cycles(short_c,c2,rgb_cycle,s_cosets,s_p,labels)
+
+
+   #for k in range(len(c)):
+   #    print labels[c[k]]
+
+   #print labels[p]
+
+   #print(long_c)
+   #b_1 = np.array([0,1,3,2,0])
+   #b_2 = np.array([1,3,2,0,1])
+
+   #b_1 = np.array([0,1,0])
+   #b_2 = np.array([0,1,0])
+
+   #k = b.calculate_permutation_between_boxes(b_1,b_2,x,n=3)
+   #print(k)
+   #print(x[k])
+   #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
+   #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1],[1,2,3,0],[1,3,0,2],[2,3,1,0],[2,0,3,1],[3,2,0,1],[3,0,1,2],[1,0,2,3],[2,1,0,3],[3,1,2,0],[0,2,1,3],[0,3,2,1],[0,1,3,2]])
+
+   #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,3,2,0],[0,3,1,2],[2,1,3,0]])
+   #a = np.array([[0,1,2],[1,0,2],[2,1,0],[0,2,1],[2,0,1],[1,2,0]])
+   #t = b.perm_table(a)
+
+   '''
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=6)
    #print(len(c_rings))
    print(c_rings)
    phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
@@ -1485,6 +1700,7 @@ if __name__ == "__main__":
    e = b.print_all_connections(a,rs,c_rings)
    plt.imshow(e+a)
    plt.show()
+   '''
    '''
    for k in range(len(c_rings)):
        for i in range(k+1,len(c_rings)):
