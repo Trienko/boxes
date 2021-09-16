@@ -1143,6 +1143,9 @@ class BoxAnalysis():
               c_counter += 1
               c_counter_y += 1
               c_counter_x = 0  
+          ax = plt.gca()
+          ax.axes.xaxis.set_visible(False)
+          ax.axes.yaxis.set_visible(False) 
           plt.show() 
 
       def draw_long_cycles(self,long_c,cl,rgb_cycle,cosets,p_cycle,l,step = 1, c1=3.0, c2=8.0, c3=4.0):
@@ -1180,7 +1183,9 @@ class BoxAnalysis():
               c_counter_y += 1
               c_counter_x = 0
               x_c = 0
-              
+          ax = plt.gca()
+          ax.axes.xaxis.set_visible(False)
+          ax.axes.yaxis.set_visible(False) 
           plt.show() 
 
       def to_latex(self,s):
@@ -1225,7 +1230,9 @@ class BoxAnalysis():
               c_counter_y += 1
               c_counter_x = 0
               x_c = 0
-              
+          ax = plt.gca()
+          ax.axes.xaxis.set_visible(False)
+          ax.axes.yaxis.set_visible(False)   
           plt.show() 
 
 
@@ -1513,6 +1520,29 @@ class BoxAnalysis():
              perm_answ[not_in_b1] = not_in_b2
              #print(perm_answ)
           return self.find_index(perm_answ,p)
+
+      def convert_to_cycle_notation(self,perm):
+          found = np.zeros((len(perm),),dtype=int)
+          cycle_str = ""
+          for k in range(len(found)):
+              if found[k] == 0:
+                 #print(found)
+                 cycle_str += "("
+                 idx = perm[k]
+                 found[k] = 1
+                 if idx <> k:
+                    cycle_str += str(k)+str(idx)
+                 else:
+                    cycle_str += str(k)
+                 while found[idx] <> 1:
+                       found[idx] = 1
+                       idx = perm[idx]
+                       if found[idx] == 1:
+                          break
+                       cycle_str += str(idx)
+                 cycle_str += ")"
+          return cycle_str
+            
                                               
       def convert_short_long_cycle_to_coset(self,cycle,p,p_table,n=4,longc=True):
           if longc:
@@ -1606,6 +1636,13 @@ class BoxAnalysis():
           plt.show()      
       '''
 
+      def print_conj_class(self,c_rings,x,n=4):
+          for c in c_rings:
+              k = b.calculate_permutation_between_boxes(c[1],c[3],x,n=n)
+              print(self.convert_to_cycle_notation(x[k]))
+   
+              
+
 if __name__ == "__main__":
 
    b = BoxAnalysis()
@@ -1615,32 +1652,43 @@ if __name__ == "__main__":
    
    #labels = ["iota","gamma","alpha","B","A","beta"] #for n = 3
    #labels = ["iota","p","n","theta","eta","o","k","y","delta","A","B","zeta","beta","D","l","epsilon","z","C","F","alpha","gamma","m","E","x"] #for n = 4
-   labels = []
-   x = b.generate_permutations(n=5)
-   x = np.array(x)
-   print(x)
-   t = b.perm_table(x)
-   print(t)
-   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=5)
-   long_c = b.generate_all_long_cycles(i_n_1)
-   short_c = b.generate_all_short_cycles(i_n)
+   #labels = []
+   x = b.generate_permutations(n=6)
+   #x = np.array(x)
+   #print(x)
+   #t = b.perm_table(x)
+   #print(t)
+   i_n,i_n_1,c_rings = b.generate_all_color_rings(n=6)
+   #print(c_rings)
+   b.print_conj_class(c_rings,x,n=6)
+   #long_c = b.generate_all_long_cycles(i_n_1)
+   #print(len(long_c))
+   #short_c = b.generate_all_short_cycles(i_n)
+   #print(len(short_c))
    #c,p = b.convert_short_long_cycle_to_coset(long_c[1],x,t,n=3)
    #b.convert_all_short_long_cycles_to_cosets(long_c,x,t,n=3,labels=labels)
    #print(short_c)
-   s_cosets,s_p = b.convert_all_short_long_cycles_to_cosets(short_c,x,t,n=5,labels=labels,longc=False)   
-   l_cosets,l_p = b.convert_all_short_long_cycles_to_cosets(long_c,x,t,n=5,labels=labels,longc=True)
-   c_cosets,c_p = b.convert_all_color_cycles_to_cosets(c_rings,x,t,n=5,labels=labels)   
+   #s_cosets,s_p = b.convert_all_short_long_cycles_to_cosets(short_c,x,t,n=3,labels=labels,longc=False)   
+   #l_cosets,l_p = b.convert_all_short_long_cycles_to_cosets(long_c,x,t,n=3,labels=labels,longc=True)
+   #c_cosets,c_p = b.convert_all_color_cycles_to_cosets(c_rings,x,t,n=3,labels=labels)   
    
-   phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
-   rgb_cycle = np.vstack((            # Three sinusoids
-    .5*(1.+np.cos(phi          )), # scaled to [0,1]
-    .5*(1.+np.cos(phi+2*np.pi/3)), # 120 phase shifted.
-    .5*(1.+np.cos(phi-2*np.pi/3)))).T # Shape = (54,3)
+   #phi = np.linspace(0, 2*np.pi, len(c_rings)+2)
+   #rgb_cycle = np.vstack((            # Three sinusoids
+   # .5*(1.+np.cos(phi          )), # scaled to [0,1]
+   # .5*(1.+np.cos(phi+2*np.pi/3)), # 120 phase shifted.
+   # .5*(1.+np.cos(phi-2*np.pi/3)))).T # Shape = (54,3)
 
-   c1,c2 = b.find_color(c_rings,long_c,short_c)
-   b.draw_color_cycles(c_rings,rgb_cycle,c_cosets,c_p,labels)
-   b.draw_long_cycles(long_c,c1,rgb_cycle,l_cosets,l_p,labels)
-   b.draw_small_cycles(short_c,c2,rgb_cycle,s_cosets,s_p,labels)
+   #c1,c2 = b.find_color(c_rings,long_c,short_c)
+   
+   #Settings for n = 4
+   #b.draw_color_cycles(c_rings,rgb_cycle,c_cosets,c_p,labels,c1=3.0, c2=8.0, c3=4.0)
+   #b.draw_long_cycles(long_c,c1,rgb_cycle,l_cosets,l_p,labels,c1=5.0, c2=16.0, c3=7.0)
+   #b.draw_small_cycles(short_c,c2,rgb_cycle,s_cosets,s_p,labels,c1=5.0, c2=16.0, c3=7.0)
+
+   #Settings for n = 3
+   #b.draw_color_cycles(c_rings,rgb_cycle,c_cosets,c_p,labels,c1=10.0, c2=16.0, c3=7.0)
+   #b.draw_long_cycles(long_c,c1,rgb_cycle,l_cosets,l_p,labels,c1=20.0, c2=20.0, c3=10.0)
+   #b.draw_small_cycles(short_c,c2,rgb_cycle,s_cosets,s_p,labels,c1=10.0, c2=40.0, c3=20.0)
 
 
    #for k in range(len(c)):
@@ -1655,9 +1703,12 @@ if __name__ == "__main__":
    #b_1 = np.array([0,1,0])
    #b_2 = np.array([0,1,0])
 
-   #k = b.calculate_permutation_between_boxes(b_1,b_2,x,n=3)
+   #k = b.calculate_permutation_between_boxes(b_1,b_2,x,n=4)
    #print(k)
    #print(x[k])
+   #tem = np.array([0, 1, 3, 2])
+   #s = b.convert_to_cycle_notation(tem)
+   #print(s)
    #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1]])
    #a = np.array([[0,1,2,3],[3,0,2,1],[2,0,1,3],[3,1,0,2],[1,2,0,3],[2,1,3,0],[1,3,2,0],[0,3,1,2],[0,2,3,1],[3,2,1,0],[1,0,3,2],[2,3,0,1],[1,2,3,0],[1,3,0,2],[2,3,1,0],[2,0,3,1],[3,2,0,1],[3,0,1,2],[1,0,2,3],[2,1,0,3],[3,1,2,0],[0,2,1,3],[0,3,2,1],[0,1,3,2]])
 
