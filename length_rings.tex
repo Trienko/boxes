@@ -4,6 +4,7 @@
 \usepackage[english]{babel}
 \usepackage{amsthm}
 \newtheorem{theorem}{Theorem}
+\usepackage{amssymb}
 
 %opening
 \title{Last two layers of $G_n$}
@@ -137,7 +138,7 @@ n &\textrm{if}~n~\textrm{mod}~2=0\\
 \section{Color Cycles}
 We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Finding the innerbox $b_2$ of size $n$ which follows an innerbox $b_1$ of size $n+1$ is achieved by copying the last $n-2$ symbols of $b_1$ and then appending to it the third symbol contained in $b_1$. Moreover, obtaining the innerbox $b_2$ of size $n+1$ which follows an innerbox $b_1$ of size $n$ is obtained by copying the last $n-2$ symbols in $b_1$ and appending to it the alphabet symbol in $\Sigma_n$ not contained in $b_1$ followed by the second symbol in $b_1$. The effect of this interlacing is that we in effect map innerboxes of size $n+1$ to innerboxes of size $n+1$ via an intermediary innerbox of size $n$. A similar argument can be made regarding the innerboxes of size $n$. Let us now consider without loss of generality the follwing innerbox pairs of size $n+1$ which were obtained via the procedure above and an intermediary innerbox of size $n$:
 \begin{equation}
-010\rightarrow010:c_1=
+010\rightarrow010:c_2=
 \begin{pmatrix}
 0&1\\
 0&1
@@ -145,7 +146,7 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-0120\rightarrow0210:c_2=
+0120\rightarrow0210:c_3=
 \begin{pmatrix}
 0&1&2\\
 0&2&1
@@ -153,7 +154,7 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-01230\rightarrow30213:c_3=
+01230\rightarrow30213:c_4=
 \begin{pmatrix}
 0&1&2&3\\
 3&0&2&1
@@ -161,7 +162,7 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-012340\rightarrow340213:c_4=
+012340\rightarrow340213:c_5=
 \begin{pmatrix}
 0&1&2&3&4\\
 3&4&0&2&1
@@ -169,7 +170,7 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-0123450\rightarrow3450213:c_5=
+0123450\rightarrow3450213:c_6=
 \begin{pmatrix}
 0&1&2&3&4&5\\
 3&4&5&0&2&1
@@ -177,14 +178,14 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-01234560\rightarrow34560213:c_6=
+01234560\rightarrow34560213:c_7=
 \begin{pmatrix}
 0&1&2&3&4&5&6\\
 3&4&5&6&0&2&1
 \end{pmatrix} = (25)(03614)
 \end{equation}
 
-\begin{equation}c_7=
+\begin{equation}c_8=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7\\
 3&4&5&6&7&0&2&1
@@ -192,7 +193,7 @@ We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Findi
 \end{equation}
 
 \begin{equation}
-c_8=
+c_9=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7&8\\
 3&4&5&6&7&8&0&2&1
@@ -200,7 +201,7 @@ c_8=
 \end{equation}
 
 \begin{equation}
-c_9=
+c_10=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7&8&9\\
 3&4&5&6&7&8&9&0&2&1
@@ -274,19 +275,35 @@ The third equation follows from the second since the conjugates of products are 
 \end{proof}
 
 \begin{theorem}
-If $n \geq 5$ then the only normal subgroups of $S_n$ are the trivial subgroup, the alternating group $A_n$ and $S_n$ itself. 
+For $n \geq 5$, $A_n$ is the only proper nontrivial normal subgroup of $S_n$. 
 \end{theorem}
 \begin{proof}
-TBA 
+%proof taken verbatim from https://planetmath.org/normalsubgroupsofthesymmetricgroups
+Let $N \unlhd S_n$ be normal. Clearly $N\cap A_n \unlhd A_n$. But $A_n$ is simple so $N\cap A_n = A_n$ or $N\cap A_n = \{\iota\}$. In the first case either $N=A_n$, or else $N$ also contains and odd permutation, in which case $N=S_n$. In the second case either $N=\{\iota\}$ or else $N$ consists solely of one or more odd permutations in addition to $\{\iota\}$. But if $N$ contains two distinct odd permutations $\sigma$ and $\tau$, then either $\sigma^2 \neq \iota$ or $\sigma \tau \neq \iota$ and both $\sigma^2$ and $\sigma \tau$ are even, which contradicts the assumption that $N$ contains only odd non-trivial permutations. Thus $N$ must be of order 2, consisting of a single odd permutation of order 2 together with the identity. \\
+
+Such a subgroup cannot be normal. An odd permutation of order 2, $\sigma$, has as its cycle decomposition one or more (an odd number, in fact, though this does not matter here) of disjoint transpositions. Suppose without loss of generality that (12) is one of these. Then $\tau = (13)(12)\cdots(13)$ takes 2 to 3 and thus is neither $\tau$ or $\iota$. Thus $N$ is not normal.
 \end{proof}
 
 \begin{theorem}
-$\textrm{Cl}(a_n)$ and $\textrm{Cl}(c_n)$ generates $S_n$. 
+If $n$ is odd then $\textrm{Cl}(a_n)$ consists of even permutations, while $\textrm{Cl}(c_n)$ consist of odd permutations. On the other hand, if $n$ is even then the reverse is true. $\textrm{Cl}(b_n)$ consists of odd permutations for all $n$.     
 \end{theorem}
+\begin{proof}
+Let $x$ be an arbitrary element of $\textrm{Cl}(a_n)$. The element $x$ is a cycle of length $n$ and as such can be decomposed into $n-1$ transpositions. Therefore when $n$ is odd $\textrm{Cl}(a_n)$ consists out of even permutations, if $n$ is even then $\textrm{Cl}(a_n)$ consists of odd permutations. Let $x$ be an arbitrary element of $\textrm{Cl}(c_n)$. The element $x$ can be decomposed into $n-2$ transpositions, as such when $n$ is odd $\textrm{Cl}(c_n)$ consists of odd permutations and if $n$ is even it consists of even permutations. Similarly let $x$ be an arbitrary element of $\textrm{Cl}(b_n)$. If $n$ is even $x$ can be decomposed into $n-1$ transpositions, while if $n$ is odd it can be decomposed into $n-2$ transpositions, as such $\textrm{Cl}(b_n)$ always consists of odd permutations.     
+\end{proof}
 
 \begin{theorem}
-$\textrm{Cl}(b_n)$ and $\textrm{Cl}(c_n)$ generates $S_n$. 
+$\textrm{Cl}(a_n)$ and $\textrm{Cl}(c_n)$ together generates $S_n$. $\textrm{Cl}(b_n)$ generates $S_n$. 
 \end{theorem}
+\begin{proof}
+There are two cases when $n\geq 5$.\\
+
+\textbf{Case 1}. Assume that $n$ is even. Let $S=<\textrm{Cl}(a_n)>$. From Theorem, we know that $S$ must be a normal subgroup of $S_n$. From Theorem, we know that $S$ must consist of odd and even permutations. It now follows from Theorem that $S=S_n$.
+
+\textbf{Case 2}. Assume that $n$ is odd. Let $S=<\textrm{Cl}(a_n)>$. From Theorem, we know that $S$ must be a normal subgroup of $S_n$. From Theorem, we know that $S$ must consist of even permutations. It now follows from Theorem that $S=A_n$. To generate $S_n$ from $A_n$ we need a signle odd permutation, which $\textrm{Cl}(c_n)$ provides.  
+
+A similar argument can be used to show that $\textrm{Cl}(b_n)$ generates $S_n$.
+\end{proof}
+
 
 
 
