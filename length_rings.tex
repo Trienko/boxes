@@ -1,9 +1,12 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\newtheorem{theorem}{Theorem}
 
 %opening
-\title{Length Cycles}
+\title{Last two layers of $G_n$}
 \author{}
 
 \begin{document}
@@ -13,93 +16,128 @@
 %\begin{abstract}
 
 %\end{abstract}
+We assume that the reader has a general background in the combinatorics on words. An alphabet is a finite set $\Sigma$ of symbols. For an alphabet of $n$ symbols, we write $\Sigma_n$. A word $w$ or string $s$ is any sequence of letters from $\Sigma$. $\Sigma^{*}$ is the set of all words over $\Sigma$.
+
+Let $G_n$ be the innerbox graph defined in our previous paper. The nodes of this graph consist of all the innerboxes contained in $\Sigma_n^*$. Two nodes are only connected via an edge if the word formed by merging the innerboxes associated with the two nodes have size $n+2$. If we only look at the last two layers of $G_n$ we immediatly notice that they are of the same size $n!$, i.e. they are of the same size as the symmetric group $S_n$. We will now show that these last two layers can be constructed using three types of cycles. In the last layer of $G_n$ we have the cycles formed by chaining together the innerboxes of length $n+1$. In the second last layer we have the cycles which can be formed by chaining together all the innerboxes of length $n$. Then we can connect the two layers via cycles that are constructed by intermittently chaining together one innerbox of length $n$ and one innerbox of length $n+1$.  
+
 
 \section{Long Cycles}
-We have:
+Let us first investigate the cycles in the last layer of $G_n$. We find the subsequent innerbox $b_2$ which follows an innebox $b_1$ (both of length $n+1$) by copying the last $n$ digits of $b_1$ and appending to this intermediate word the second symbol found in $b_1$.   Let us now, without the loss of generality consider the following $n+1$ innerbox pairs:
 
 \begin{equation}
-010\rightarrow101:\begin{pmatrix}
+010\rightarrow101:a_2=\begin{pmatrix}
 0&1\\
 1&0
 \end{pmatrix} = (01)
 \end{equation}
 \begin{equation}
-0120\rightarrow1201:\begin{pmatrix}
+0120\rightarrow1201:a_3=\begin{pmatrix}
 0&1&2\\
 1&2&0
 \end{pmatrix} = (012)
 \end{equation}
 \begin{equation}
-01230\rightarrow12301:\begin{pmatrix}
+01230\rightarrow12301:a_4=\begin{pmatrix}
 0&1&2&3\\
 1&2&3&0
 \end{pmatrix} = (0123)
 \end{equation}
 
-For $n$:
+From the above equations we see that we can also calculate the subsequent innerbox $b_2$ of size $n+1$ which follows an innerbox $b_1$ of size $n+1$ via a permutation $a_n$. Continuing along these lines we find that:
+
 \begin{equation}
-\overbrace{(0123\cdots n-1)}^n 
+a_n = \overbrace{(0123\cdots n-1)}^n 
 \end{equation}
 
-\section{Short Cycles}
-We have:
+The permutation which generates one innerbox from another innerbox of size $n+1$ will always have the same cycle type as it comes about via the same geometric process. Furthermore, as all permutations are present in the first $n$ characters of the innerboxes of size $n+1$ we will obtain all of the cycle permutations that is of the same cycle type as $a_n$ if we consider all innerbox pairs of length $n+1$ that connect with one another.
+
+Moreover, we see that $a_n$ is a cyclic permutation of length $n$, i.e $|\!\!<\!\!a_n\!\!>\!\!|=n$. The size of the innerbox cycles in the last layer of $G_n$ is therefore $n$. As an example:
+
 \begin{equation}
-00\rightarrow11:
+0120\rightarrow 1201 \rightarrow 2012 
+\end{equation}
+
+
+\section{Short Cycles}
+Similarly we can consider the cycles in the second last layer of $G_n$. We can construct the subsequent innerbox $b_2$ of length $n$ following an innerbox $b_1$ of length $n$ by copying the last $n-2$ symbols from $b_1$ and appending to this intermediate word the alphabet symbol in $\Sigma_n$ that is not present in $b_1$ following the third symbol of $b_1$. Note there is one exception when $n=2$. In this case we simply replace all the symbols in $b_1$ (which is the same symbol) with the symbol in $\Sigma$ not contained in $b_1$. Let us now consider without any loss in generality the following innerbox pairs:
+\begin{equation}
+00\rightarrow11:b_2=
 \begin{pmatrix}
 0&1\\
 1&0
 \end{pmatrix} = (01)
 \end{equation}
 \begin{equation}
-010\rightarrow020:
+010\rightarrow020:b_3=
 \begin{pmatrix}
 0&1&2\\
 0&2&1
 \end{pmatrix} = (0)(12)
 \end{equation}
 \begin{equation}
-0120\rightarrow2032:
+0120\rightarrow2032:b_4=
 \begin{pmatrix}
 0&1&2&3\\
 2&0&3&1
 \end{pmatrix} = (0231)
 \end{equation}
 \begin{equation}
-01230\rightarrow23042:
+01230\rightarrow23042:b_5=
 \begin{pmatrix}
 0&1&2&3&4\\
 2&3&0&4&1
 \end{pmatrix} = (02)(134)
 \end{equation}
 \begin{equation}
-012340\rightarrow234052:
+012340\rightarrow234052:b_6=
 \begin{pmatrix}
 0&1&2&3&4&5\\
 2&3&4&0&5&1
 \end{pmatrix} = (024513)
 \end{equation}
 \begin{equation}
-0123450\rightarrow2345062:
+0123450\rightarrow2345062:b_7=
 \begin{pmatrix}
 0&1&2&3&4&5&6\\
 2&3&4&5&0&6&1
 \end{pmatrix} = (024)(1356)
 \end{equation}
+Continuing along these lines we obtain:
 
-For even $n$:
 \begin{equation}
-\overbrace{(02\cdots[n-2][n-1]13\cdots[n-3])}^{n}
+b_n = \left\{
+\begin{array}{ll}
+\overbrace{(02\cdots[n-2][n-1]13\cdots[n-3])}^{n}&\textrm{if}~n~\textrm{mod}~2=0\\
+\overbrace{(02\cdots[n-3])}^{\frac{n-1}{2}}\overbrace{(13\cdots[n-2][n-1])}^{\frac{n+1}{2}}&\textrm{if}~n~\textrm{mod}~2=1 
+\end{array}
+\right.
 \end{equation}
 
-For odd $n$:
+As was the case for $a_n$, since the generation algorithm used is geometric in nature the permutation which maps one innerbox of length $n$ to another innerbox of lenght $n$ will always be of the same cycle type. Note that, all the  permutations of $n$ can be constructed from the innerboxes of lenght $n$ by simply replacing the last symbol of the innerbox with the symbol in $\Sigma_n$ it does not already contain. This observation implies that we will obtain all permutations that have the same cycle type as $b_n$ if we consider all the possible innerbox pairs of length $n$. Furthermore,
+
 \begin{equation}
-\overbrace{(02\cdots[n-3])}^{\frac{n-1}{2}}\overbrace{(13\cdots[n-2][n-1])}^{\frac{n+1}{2}} 
+|\!\!<\!\!b_n\!\!>\!\!|= \left\{
+\begin{array}{ll}
+n &\textrm{if}~n~\textrm{mod}~2=0\\
+\textrm{lcm}(\frac{n-1}{2},\frac{n+1}{2}) &\textrm{if}~n~\textrm{mod}~2=1 
+\end{array}
+\right.
 \end{equation}
 
+
+% \begin{equation}
+% \overbrace{(02\cdots[n-2][n-1]13\cdots[n-3])}^{n}
+% \end{equation}
+% 
+% For odd $n$:
+% \begin{equation}
+% \overbrace{(02\cdots[n-3])}^{\frac{n-1}{2}}\overbrace{(13\cdots[n-2][n-1])}^{\frac{n+1}{2}} 
+% \end{equation}
+ 
 \section{Color Cycles}
-We have:
+We can also create cycles by interlacing innerboxes of size $n$ and $n+1$. Finding the innerbox $b_2$ of size $n$ which follows an innerbox $b_1$ of size $n+1$ is achieved by copying the last $n-2$ symbols of $b_1$ and then appending to it the third symbol contained in $b_1$. Moreover, obtaining the innerbox $b_2$ of size $n+1$ which follows an innerbox $b_1$ of size $n$ is obtained by copying the last $n-2$ symbols in $b_1$ and appending to it the alphabet symbol in $\Sigma_n$ not contained in $b_1$ followed by the second symbol in $b_1$. The effect of this interlacing is that we in effect map innerboxes of size $n+1$ to innerboxes of size $n+1$ via an intermediary innerbox of size $n$. A similar argument can be made regarding the innerboxes of size $n$. Let us now consider without loss of generality the follwing innerbox pairs of size $n+1$ which were obtained via the procedure above and an intermediary innerbox of size $n$:
 \begin{equation}
-010\rightarrow010:
+010\rightarrow010:c_1=
 \begin{pmatrix}
 0&1\\
 0&1
@@ -107,7 +145,7 @@ We have:
 \end{equation}
 
 \begin{equation}
-0120\rightarrow0210:
+0120\rightarrow0210:c_2=
 \begin{pmatrix}
 0&1&2\\
 0&2&1
@@ -115,7 +153,7 @@ We have:
 \end{equation}
 
 \begin{equation}
-01230\rightarrow30213:
+01230\rightarrow30213:c_3=
 \begin{pmatrix}
 0&1&2&3\\
 3&0&2&1
@@ -123,7 +161,7 @@ We have:
 \end{equation}
 
 \begin{equation}
-012340\rightarrow340213:
+012340\rightarrow340213:c_4=
 \begin{pmatrix}
 0&1&2&3&4\\
 3&4&0&2&1
@@ -131,7 +169,7 @@ We have:
 \end{equation}
 
 \begin{equation}
-0123450\rightarrow3450213:
+0123450\rightarrow3450213:c_5=
 \begin{pmatrix}
 0&1&2&3&4&5\\
 3&4&5&0&2&1
@@ -139,14 +177,14 @@ We have:
 \end{equation}
 
 \begin{equation}
-01234560\rightarrow34560213:
+01234560\rightarrow34560213:c_6=
 \begin{pmatrix}
 0&1&2&3&4&5&6\\
 3&4&5&6&0&2&1
 \end{pmatrix} = (25)(03614)
 \end{equation}
 
-\begin{equation}
+\begin{equation}c_7=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7\\
 3&4&5&6&7&0&2&1
@@ -154,6 +192,7 @@ We have:
 \end{equation}
 
 \begin{equation}
+c_8=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7&8\\
 3&4&5&6&7&8&0&2&1
@@ -161,27 +200,103 @@ We have:
 \end{equation}
 
 \begin{equation}
+c_9=
 \begin{pmatrix}
 0&1&2&3&4&5&6&7&8&9\\
 3&4&5&6&7&8&9&0&2&1
 \end{pmatrix} = (258)(1470369)
 \end{equation}
 
-If $n$ is divisible by 3:
+Continuing along these lines we obtain:
 
 \begin{equation}
-\overbrace{(03\cdots[n-3])}^{\frac{n}{3}}\overbrace{(14\cdots[n-2]25\cdots[n-1])}^{\frac{2n}{3}}
+c_n = \left\{
+\begin{array}{ll}
+\overbrace{(03\cdots[n-3])}^{\frac{n}{3}}\overbrace{(14\cdots[n-2]25\cdots[n-1])}^{\frac{2n}{3}}&\textrm{if}~n~\textrm{mod}~3=0\\
+\overbrace{(25\cdots[n-2])}^{\frac{n-1}{3}}\overbrace{(14\cdots[n-3]03\cdots[n-1])}^{\frac{2n+1}{3}} &\textrm{if}~n~\textrm{mod}~3=1\\
+\overbrace{(14\cdots[n-1])}^{\frac{n+1}{3}}\overbrace{(03\cdots[n-2]25\cdots[n-3])}^{\frac{2n-1}{3}} &\textrm{if}~n~\textrm{mod}~3=2 
+\end{array}
+\right.
 \end{equation}
 
-If $n$ is dived by 3, 2 remains:
+% If $n$ is divisible by 3:
+% 
+% \begin{equation}
+% \overbrace{(03\cdots[n-3])}^{\frac{n}{3}}\overbrace{(14\cdots[n-2]25\cdots[n-1])}^{\frac{2n}{3}}
+% \end{equation}
+% 
+% If $n$ is dived by 3, 2 remains:
+% \begin{equation}
+% \overbrace{(14\cdots[n-1])}^{\frac{n+1}{3}}\overbrace{(03\cdots[n-2]25\cdots[n-3])}^{\frac{2n-1}{3}} 
+% \end{equation}
+% 
+% If $n$ is dived by 3, 1 remains:
+% \begin{equation}
+% \overbrace{(25\cdots[n-2])}^{\frac{n-1}{3}}\overbrace{(14\cdots[n-3]03\cdots[n-1])}^{\frac{2n+1}{3}} 
+% \end{equation}
+
+If we consider the innerboxes of size $n$ instead we obtain the exact same relation $c_n$. This notion warrants further explanation. Without any loss in generality assume that $b_1$ is equal to $01\cdots[n-1]0$. Now consider the sequence of innerboxes $b_1$, $b_2$, $b_3$ and $b_4$ generated via the procedure outlined in the beginning of this section. It now follows that $b_3 = c_n(b_1)$ and $b_4 = c_n(b_2)$. Moreover, $c_n$ maps the first $n-2$ characters of $b_1$ to the last $n-2$ characters of $b_2$. Similarly, $c_n$ maps the first $n-2$ characters of $b_2$ to the last $n-2$ characters of $b_3$. As was the case for both $a_n$ and $b_n$, as the generation procedure we use to generate a box of size $n+1$ from another $n+1$ box via a box of size $n$ (and vice versa) is geometric in nature the permutation which maps the two $n+1$ innerboxes to one another will be of the same cycle type. As we can generate all permutations from the $n+1$ innerboxes of $\Sigma_n^*$ we will obtain all the permutations that has the same cycle type as $c_n$ if we consider all pairs of innerboxes of size $n+1$ which map to one another via a third innerbox of length $n$. Moreover,
+
 \begin{equation}
-\overbrace{(14\cdots[n-1])}^{\frac{n+1}{3}}\overbrace{(03\cdots[n-2]25\cdots[n-3])}^{\frac{2n-1}{3}} 
+|\!\!<\!\!c_n\!\!>\!\!|= \left\{
+\begin{array}{ll}
+\textrm{lcm}(\frac{n}{3},\frac{2n}{3}) &\textrm{if}~n~\textrm{mod}~3=0\\
+\textrm{lcm}(\frac{n-1}{3},\frac{2n+1}{3}) &\textrm{if}~n~\textrm{mod}~3=1\\
+\textrm{lcm}(\frac{n+1}{3},\frac{2n-1}{3}) &\textrm{if}~n~\textrm{mod}~3=2
+\end{array}
+\right.
 \end{equation}
 
-If $n$ is dived by 3, 1 remains:
+\section{Conjugancy Classes}
+Consider a group $G$. Recall that the following equivalence class that contains the element $a\in G$
 \begin{equation}
-\overbrace{(25\cdots[n-2])}^{\frac{n-1}{3}}\overbrace{(14\cdots[n-3]03\cdots[n-1])}^{\frac{2n+1}{3}} 
+ \textrm{Cl} (a)=\left\{gag^{-1}:g\in G\right\}
 \end{equation}
+is known as the conjugancy class of $a$. 
+
+\begin{theorem}
+The conjugacy class $\textrm{Cl}(x)$ of an element $x \in S_n$ consists of all the elements of $S_n$ whose cycle type is the same as the cycle type of $x$.  
+\end{theorem}
+
+\begin{proof}
+TBA
+\end{proof}
+
+\begin{theorem}
+The subgroup generated by the conjugacy class $\textrm{Cl}(x)$ of an element $x \in S_n$ is normal in $S_n$.   
+\end{theorem}
+\begin{proof}
+Let $S = \textrm{Cl}(x)$ and $H = <S>$. For any $\sigma\in S_n$ we have that
+\begin{equation}
+\sigma H \sigma^{-1} = \sigma <S> \sigma^{-1} = <\sigma S \sigma^{-1}> = <S> = H 
+\end{equation}
+The third equation follows from the second since the conjugates of products are equal to the products of conjugates. The fourth equation follows from the fact that $S$ is a conjugacy class of $S_n$.
+\end{proof}
+
+\begin{theorem}
+If $n \geq 5$ then the only normal subgroups of $S_n$ are the trivial subgroup, the alternating group $A_n$ and $S_n$ itself. 
+\end{theorem}
+\begin{proof}
+TBA 
+\end{proof}
+
+\begin{theorem}
+$\textrm{Cl}(a_n)$ and $\textrm{Cl}(c_n)$ generates $S_n$. 
+\end{theorem}
+
+\begin{theorem}
+$\textrm{Cl}(b_n)$ and $\textrm{Cl}(c_n)$ generates $S_n$. 
+\end{theorem}
+
+
+
+
+
+
+
+
+
+
 
 
 
