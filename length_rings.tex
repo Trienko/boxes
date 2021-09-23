@@ -256,11 +256,40 @@ Consider a group $G$. Recall that the following equivalence class that contains 
 is known as the conjugancy class of $a$. 
 
 \begin{theorem}
+For $n\geq 3$, each element of $A_n$ is a product of 3-cycles. Therefore the 3-cycles generate $A_n$.
+\end{theorem}
+\begin{proof}
+%NB TAKEN VERBATIM from https://kconrad.math.uconn.edu/blurbs/grouptheory/genset.pdf SO NEEDS TO BE REWORDED
+The identity is $(123)^3$. Now pick a non-trivial element of $A_n$ say $\sigma$. Write it as a product of transpositions in $S_n$ say
+\begin{equation}
+\sigma = \tau_1\tau_2 \cdots \tau_r 
+\end{equation}
+The number of terms, $r$, without loss of generality we may assume that adjacent $\tau$'s are not equal. If the transpositions $\tau_i$ and $\tau_{i+1}$ have one element in common, say a, then we can write $\tau_i = (ab)$ and $\tau_{i+1}=(ac)$, where $b\neq c$. It now follows that
+\begin{equation}
+\tau_i\tau_{i+1} = (ab)(ac) = (acb), 
+\end{equation}
+which is a 3-cycle. If $\tau_i$ and $\tau_{i+1}$ are disjoint, then $n\geq 4$ and we can write $\tau_i = (ab)$ and $\tau_{i+1} = (cd)$, where $a,b,c$ and $d$ are distinct, so 
+\begin{equation}
+\tau_i\tau_{i+1}=(ab)(cd)=(ab)(bc)(bc)(cd)=(bca)%(cdb)=(abc)(bcd) 
+\end{equation}
+which is a product of two 3-cycles.
+
+
+
+\end{proof}
+
+\begin{theorem}
 The conjugacy class $\textrm{Cl}(x)$ of an element $x \in S_n$ consists of all the elements of $S_n$ whose cycle type is the same as the cycle type of $x$.  
 \end{theorem}
 
 \begin{proof}
-TBA
+%copied verbatim from http://www.math.wm.edu/~vinroot/415conj.pdf
+Suppose $\sigma$ has cycle type $(k_1,k_2,\cdots,k_l)$ so that $\sigma$ can be written as a product of disjoint cycles $\sigma = \alpha_1\alpha_2\cdots \alpha_l$, where $\alpha_i$ is a $k_i$-cycle. Let $\tau\in S_n$, we can now write
+\begin{equation}
+\tau \sigma \tau^{-1} = \tau \alpha_i\alpha_2\cdots\alpha_l\tau^{-1}=(\tau \alpha_i\tau^{-1})(\tau\alpha_2\tau^{-1})\cdots(\tau\alpha_l\tau^{-1}) 
+\end{equation}
+Now for each $i$ such that $1\leq i\leq l$ we have that $\alpha_i$ is a $k_i$-cycle. For $i,j\in\{1,2,cdots,l\}$
+such that $i\neq j$ we know that $\alpha_i$ and $\alpha_j$ are disjoint and so $\tau\alpha_i\tau^{-1}$ and $\tau\alpha_j\tau^{-1}$ must be disjoint since $\tau$ is a one-to-one function. So the product $\tau\sigma\tau^{-1}$ can be written as a product of disjoint cycles and $\tau\alpha_i\tau^{-1}$ is a $k_i$-cycle. Any conjugate of $\sigma$, therefore, has cycle type $(k_1,k_2,\cdots,k_l)$.  
 \end{proof}
 
 \begin{theorem}
@@ -288,13 +317,19 @@ Such a subgroup cannot be normal. An odd permutation of order 2, $\sigma$, has a
 If $n$ is odd then $\textrm{Cl}(a_n)$ consists of even permutations, while $\textrm{Cl}(c_n)$ consist of odd permutations. On the other hand, if $n$ is even then the reverse is true. $\textrm{Cl}(b_n)$ consists of odd permutations for all $n$.     
 \end{theorem}
 \begin{proof}
-Let $x$ be an arbitrary element of $\textrm{Cl}(a_n)$. The element $x$ is a cycle of length $n$ and as such can be decomposed into $n-1$ transpositions. Therefore when $n$ is odd $\textrm{Cl}(a_n)$ consists out of even permutations, if $n$ is even then $\textrm{Cl}(a_n)$ consists of odd permutations. Let $x$ be an arbitrary element of $\textrm{Cl}(c_n)$. The element $x$ can be decomposed into $n-2$ transpositions, as such when $n$ is odd $\textrm{Cl}(c_n)$ consists of odd permutations and if $n$ is even it consists of even permutations. Similarly let $x$ be an arbitrary element of $\textrm{Cl}(b_n)$. If $n$ is even $x$ can be decomposed into $n-1$ transpositions, while if $n$ is odd it can be decomposed into $n-2$ transpositions, as such $\textrm{Cl}(b_n)$ always consists of odd permutations.     
+Let $x$ be an arbitrary element of $\textrm{Cl}(a_n)$. We know from Theorem, that $x$ will be of the same cycle type as $a_n$. The element $x$ is a cycle of length $n$ and as such can be decomposed into $n-1$ transpositions. Therefore when $n$ is odd $\textrm{Cl}(a_n)$ consists out of even permutations, if $n$ is even then $\textrm{Cl}(a_n)$ consists of odd permutations. Let $x$ be an arbitrary element of $\textrm{Cl}(c_n)$. We know from Theorem, that $x$ will be of the same cycle type as $c_n$. The element $x$ can be decomposed into $n-2$ transpositions, as such when $n$ is odd $\textrm{Cl}(c_n)$ consists of odd permutations and if $n$ is even it consists of even permutations. Similarly let $x$ be an arbitrary element of $\textrm{Cl}(b_n)$. We know from Theorem, that $x$ will be of the same cycle type as $b_n$. If $n$ is even $x$ can be decomposed into $n-1$ transpositions, while if $n$ is odd it can be decomposed into $n-2$ transpositions, as such $\textrm{Cl}(b_n)$ always consists of odd permutations.     
 \end{proof}
 
 \begin{theorem}
-$\textrm{Cl}(a_n)$ and $\textrm{Cl}(c_n)$ together generates $S_n$. $\textrm{Cl}(b_n)$ generates $S_n$. 
+$\{\textrm{Cl}(a_n),\textrm{Cl}(c_n)\}$ generates $S_n$. $\textrm{Cl}(b_n)$ generates $S_n$. 
 \end{theorem}
 \begin{proof}
+When $n=2$, the statement is trivially true, since $a_2 = b_2 = (01)$ and $c_2 = \iota$. \\
+
+When $n=3$, $\textrm{Cl}(a_3)$ consists of all the 3-cycles and as such generates $A_3$. We can now generate $S_3$ if we add one odd permutation (since $A_3$ has index 2), which $c_3$ provides. Moreover, $\textrm{Cl}(b_3)$ and $\textrm{Cl}(c_3)$ consists of all transpositions and as such generates $S_3$.\\
+
+When $n=4$, $\textrm{Cl}(a_4)$ consists of all the 4-cycles and as such contains all 3-cycles and as such generates $A_4$. To see why this is true, consider as an example, (1234)(1243)=(132). Since $a_4$ itself is an odd permutation $\textrm{Cl}(a_4)$ in fact generates $S_4$. Similarly, $\textrm{Cl}(b_4)$ generates $S_4$. Interestingly $\textrm{Cl}(c_4)$ consists of all 3-cycles and, therefore, in conjunction with $a_4$ also generates $S_4$.\\
+
 There are two cases when $n\geq 5$.\\
 
 \textbf{Case 1}. Assume that $n$ is even. Let $S=<\textrm{Cl}(a_n)>$. From Theorem, we know that $S$ must be a normal subgroup of $S_n$. From Theorem, we know that $S$ must consist of odd and even permutations. It now follows from Theorem that $S=S_n$.
