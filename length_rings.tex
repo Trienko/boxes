@@ -255,6 +255,19 @@ Consider a group $G$. Recall that the following equivalence class that contains 
 \end{equation}
 is known as the conjugancy class of $a$. 
 
+\begin{theorem} 
+For a $k$-cycle $(i_1 i_2 \cdots i_k)$ in $S_n$ and an arbitrary $\sigma \in S_n$,
+\begin{equation}
+\label{eq:conjugate_cycle_cycle}
+\sigma(i_1 i_2 \cdots i_k)\sigma^{-1} = (\sigma(i_1) \sigma(i_2)\cdots \sigma(i_k)) 
+\end{equation}
+\end{theorem}
+\begin{proof}
+%NB TAKEN VERBATIM from https://kconrad.math.uconn.edu/blurbs/grouptheory/genset.pdf SO NEEDS TO BE REWORDED
+For an integer from 1 to $n$ of the form $\sigma(i_r)$, where $1 \leq r < k$, the left side of Equation~\ref{eq:conjugate_cycle_cycle} has the effect of $\sigma(i_r) \mapsto i_r \mapsto i_{r+1} \mapsto \sigma(i_{r+1})$ and the right hand side also sends $\sigma(i_r)$ to $\sigma(i_{r+1})$. The same reasoning also shows that both sides of Equation~\ref{eq:conjugate_cycle_cycle} maps $\sigma(i_k)$ to $\sigma(i_{1})$. For an integer $l$ from 1 to $n$ and not an element of $\{\sigma(i_i),\cdots\,\sigma(i_k)\}$. It is not part of the cycle on the right hand side of Equation~\ref{eq:conjugate_cycle_cycle} and as such it merely fixes $l$. Now lets investigate what the left hand side does to $l$. The permutation $\sigma^{-1}$ sends $l$ to $\sigma^{-1}(l) \notin \{i_i,\cdots\,i_k\}$; as such the cycle $(i_1 i_2 \cdots i_k)$ fixes $\sigma^{-1}(l)$. The premutation $\sigma$ now sends $\sigma^{-1}(l)$ to $l$, i.e the left and the right hand side of Equation~\ref{eq:conjugate_cycle_cycle} fixes $l$.         
+\end{proof}
+
+
 \begin{theorem}
 For $n\geq 3$, each element of $A_n$ is a product of 3-cycles. Therefore the 3-cycles generate $A_n$.
 \end{theorem}
@@ -319,6 +332,10 @@ If $n$ is odd then $\textrm{Cl}(a_n)$ consists of even permutations, while $\tex
 \begin{proof}
 Let $x$ be an arbitrary element of $\textrm{Cl}(a_n)$. We know from Theorem, that $x$ will be of the same cycle type as $a_n$. The element $x$ is a cycle of length $n$ and as such can be decomposed into $n-1$ transpositions. Therefore when $n$ is odd $\textrm{Cl}(a_n)$ consists out of even permutations, if $n$ is even then $\textrm{Cl}(a_n)$ consists of odd permutations. Let $x$ be an arbitrary element of $\textrm{Cl}(c_n)$. We know from Theorem, that $x$ will be of the same cycle type as $c_n$. The element $x$ can be decomposed into $n-2$ transpositions, as such when $n$ is odd $\textrm{Cl}(c_n)$ consists of odd permutations and if $n$ is even it consists of even permutations. Similarly let $x$ be an arbitrary element of $\textrm{Cl}(b_n)$. We know from Theorem, that $x$ will be of the same cycle type as $b_n$. If $n$ is even $x$ can be decomposed into $n-1$ transpositions, while if $n$ is odd it can be decomposed into $n-2$ transpositions, as such $\textrm{Cl}(b_n)$ always consists of odd permutations.     
 \end{proof}
+
+
+
+
 
 \begin{theorem}
 $\{\textrm{Cl}(a_n),\textrm{Cl}(c_n)\}$ generates $S_n$. $\textrm{Cl}(b_n)$ generates $S_n$. 
