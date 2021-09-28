@@ -236,7 +236,7 @@ c_n = \left\{
 % \overbrace{(25\cdots[n-2])}^{\frac{n-1}{3}}\overbrace{(14\cdots[n-3]03\cdots[n-1])}^{\frac{2n+1}{3}} 
 % \end{equation}
 
-If we consider the innerboxes of size $n$ instead we obtain the exact same relation $c_n$. This notion warrants further explanation. Without any loss in generality assume that $b_1$ is equal to $01\cdots[n-1]0$. Now consider the sequence of innerboxes $b_1$, $b_2$, $b_3$ and $b_4$ generated via the procedure outlined in the beginning of this section. It now follows that $b_3 = c_n(b_1)$ and $b_4 = c_n(b_2)$. Moreover, $c_n$ maps the first $n-2$ characters of $b_1$ to the last $n-2$ characters of $b_2$. Similarly, $c_n$ maps the first $n-2$ characters of $b_2$ to the last $n-2$ characters of $b_3$. As was the case for both $a_n$ and $b_n$, as the generation procedure we use to generate a box of size $n+1$ from another $n+1$ box via a box of size $n$ (and vice versa) is geometric in nature the permutation which maps the two $n+1$ innerboxes to one another will be of the same cycle type. As we can generate all permutations from the $n+1$ innerboxes of $\Sigma_n^*$ we will obtain all the permutations that has the same cycle type as $c_n$ if we consider all pairs of innerboxes of size $n+1$ which map to one another via a third innerbox of length $n$. Moreover,
+If we consider the innerboxes of size $n$ instead we obtain the exact same relation $c_n$. This notion warrants further explanation. Without any loss in generality assume that $b_1$ is equal to $01\cdots[n-1]0$. Now consider the sequence of innerboxes $b_1$, $b_2$, $b_3$ and $b_4$ generated via the procedure outlined in the beginning of this section. It now follows that $b_3 = c_n(b_1)$ and $b_4 = c_n(b_2)$. Moreover, $c_n$ maps the first $n-1$ characters of $b_1$ to the last $n-1$ characters of $b_2$. Similarly, $c_n$ maps the first $n-1$ characters of $b_2$ to the last $n-1$ characters of $b_3$. As was the case for both $a_n$ and $b_n$, as the generation procedure we use to generate a box of size $n+1$ from another $n+1$ box via a box of size $n$ (and vice versa) is geometric in nature the permutation which maps the two $n+1$ innerboxes to one another will be of the same cycle type. As we can generate all permutations from the $n+1$ innerboxes of $\Sigma_n^*$ we will obtain all the permutations that has the same cycle type as $c_n$ if we consider all pairs of innerboxes of size $n+1$ which map to one another via a third innerbox of length $n$. Moreover,
 
 \begin{equation}
 |\!\!<\!\!c_n\!\!>\!\!|= \left\{
@@ -315,6 +315,29 @@ Let $S = \textrm{Cl}(x)$ and $H = <S>$. For any $\sigma\in S_n$ we have that
 \end{equation}
 The third equation follows from the second since the conjugates of products are equal to the products of conjugates. The fourth equation follows from the fact that $S$ is a conjugacy class of $S_n$.
 \end{proof}
+
+\begin{theorem}
+The group $A_5$ is simple. 
+\end{theorem}
+
+\begin{proof}
+We want to show that the only normal subgroups of $A_5$ are $\{(1)\}$ and $A_5$. There are five conjugancy classes in in $A_5$:
+
+
+If $A_5$ has a normal subgroup $N$, then $N$ is the union of conjugancy classes whose total size divides 60. However, no sum of the above numbers which include 1 is a factor of 60 except for 1 and 60. Therefore, $N$ is trivial or $A_5$.
+\end{proof}
+
+\begin{theorem}
+For $n\geq 5$, the group $A_n$ is simple. 
+\end{theorem}
+\begin{proof}
+% proof taken verbatim from https://kconrad.math.uconn.edu/blurbs/grouptheory/Ansimple.pdf
+We may suppose that $n \geq 6$ by Theorem ??. For $1 \leq i\leq n$, let $A_n$ act in the natural way on $\{1, 2, \cdots,n\}$ and let $H_i\subset A_n$ be the subgroup fixing $i$, so $H_i \cong A_n$. By induction each $H_i$ is simple.
+
+Let $N \unlhd A_n$ be a nontrivial subgroup. We want to show that $N=A_n$. Pick $\sigma \in N$ with $\sigma \neq \iota$. By Lemma ?? there is a conjugate $\sigma'$ of $\sigma$ such that $\sigma' \neq \sigma$ and $\sigma(i)=\sigma'(i)$ for some $i$. Since $N$ is normal in $A_n$, $\sigma' \in N$. Then $\sigma^{-1}\sigma'$ is a non-identity element which fixes $i$, so $N \cap H_i$ is a non-trivial subgroup of $H_i$. It is also a normal subgroup of $H_i$, since $N \unlhd A_n$. Since $H_i$ is simple $N\cap H_i = H_i$. It now follows that $H_i \subset N$. Since $H_i$ contains a 3-cycle, $N$ contains a 3-cycle and we are done.
+\end{proof}
+
+
 
 \begin{theorem}
 For $n \geq 5$, $A_n$ is the only proper nontrivial normal subgroup of $S_n$. 
