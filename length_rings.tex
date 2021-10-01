@@ -3,7 +3,10 @@
 \usepackage{amsmath}
 \usepackage[english]{babel}
 \usepackage{amsthm}
-\newtheorem{theorem}{Theorem}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
 \usepackage{amssymb}
 
 %opening
@@ -248,7 +251,89 @@ If we consider the innerboxes of size $n$ instead we obtain the exact same relat
 \right.
 \end{equation}
 
-\section{Conjugancy Classes}
+\section{Preliminaries}
+In this section we review some of the Group Theory which is needed to understand the remaining sections in this report. We do, however, assume that the reader already has a very basic understanding of Group Theory. In this report, we will denote the identity element of a group $G$ with $\iota$. 
+
+
+\subsection{Definitions}
+Consider the following basic definitions:
+
+\begin{definition}[Normal Subgroup]
+A normal subgroup is  a subgroup that is invariant under conjugation by members of the group of which it is a part. A subgroup $N$ of group $G$ is normal in $G$ if and only if $gng^{-1}\in N$ $\forall$ $g\in G$ and $n\in N$. We denote this relation as follows: $N\unlhd G$.
+\end{definition}
+
+\begin{definition}[Simple Group]
+A group $G$ with the property that its only normal subgroups are itself and the trivial subgroup $\{\iota\}$ is called simple. 
+\end{definition}
+
+\begin{definition}[Generating Set]
+In a group $G$, a subset $X\subset G$ is a generating set of $G$ if every $g\in G$ can be written as a product of powers of elements taken from $X$. We say $X$ generates $G$ and we write $G=\langle X\rangle$.
+\end{definition}
+
+\begin{definition}[Cayley Graph]
+Let $G$ be a group and let $X$ be a generating set of $G$. The Cayley graph $\Gamma(G,S)$ is an edge-colored directed graph constructed as follows:
+\begin{itemize}
+ \item Each element $g\in G$ is assigned a vertex.
+ \item Each element $x \in X$ is assigned a color $c_s$.
+ \item For every $g\in G$ and $x\in X$ there is a directed edge of color $c_s$ from vertex $g$ to $gs$.
+\end{itemize}
+\end{definition}
+
+Note that the Caley Graph $\Gamma$ is usually defined using right multipication instead of left multiplication. It just so happens for the problem we are investigating here that the latter definition is more useful.
+%https://math.stackexchange.com/questions/1226287/left-and-right-multiplication-for-cayley-graphs
+
+\begin{definition}[Conjugancy Class]
+Let $G$ be an arbitrary group. Two elements $a,b$ of $G$ are said to be $G$-conjugate if there is an $x\in G$ s.t. $b=xax^{-1}$. The set of all elements of $G$ conjugate to $a$ is called the $G$-conjugancy class of $a$, or simply, the conjugancy class of $a$. We denote this conjugancy class with $\textrm{Cl}_G(a)$. 
+\end{definition}
+
+\begin{definition}[Symmetric Group] 
+The finite symmetric group $S_n$ defined over a finite set of $n$ symbols consists of the permutations that can be performed on the $n$-symbols. 
+\end{definition}
+
+\begin{definition}[Alternating Group]
+The alternating group $A_n$ is the normal subgroup of $S_n$ which consists of all the even permutations in $S(n)$. 
+\end{definition} 
+
+\subsection{Clarifying example $S_3$}
+Firstly note that $S_3$ consists of the following elements:
+
+\begin{center}
+  \begin{tabular}{ | c || c | c | c | }
+    \hline
+    Symb. & $\iota$ & $\alpha$, $\beta$ and $\gamma$ & $A$ and $B$ \\ 
+    \hline
+    Perm. & (0) & (01),(02) and (12) & (021) and (012)\\ 
+    \hline
+    Conj. Class & Cl$(\iota)$ & Cl$(\alpha)$ & Cl$(A)$ \\ \hline
+  \end{tabular}
+\end{center}
+
+Note that we have used a different set of symbols to identify the elements of the three conjugancy classes. The composition table of $S_3$ is given below:
+
+\begin{center}
+  \begin{tabular}{ | c || c | c | c | c | c | c |}
+    \hline
+    $\circ$&$\iota$ (0)&$\alpha$ (01)&$\beta$ (02)&$\gamma$ (12)&$A$ (021)&$B$ (012)\\
+    \hline
+    \hline
+    $\iota$&$\iota$&$\alpha$&$\beta$&$\gamma$&$A$&$B$ \\
+    \hline
+    $\alpha$&$\alpha$&$\iota$&$A$&$B$&$\beta$&$\gamma$ \\
+    \hline
+    $\beta$&$\beta$&$B$&$\iota$&$A$&$\gamma$&$\alpha$\\
+    \hline
+    $\gamma$&$\gamma$&$A$&$B$&$\iota$&$\alpha$&$\beta$\\
+    \hline
+    $A$&$A$&$\gamma$&$\alpha$&$\beta$&$B$&$\iota$\\
+    \hline
+    $B$&$B$&$\beta$&$\gamma$&$\alpha$&$\iota$&$A$\\
+    \hline
+  \end{tabular}
+\end{center}
+
+As examples, $\alpha \circ \gamma = B$ and $\gamma\circ \alpha = A$.  
+
+\section{Existing Results}
 Consider a group $G$. Recall that the following equivalence class that contains the element $a\in G$
 \begin{equation}
  \textrm{Cl} (a)=\left\{gag^{-1}:g\in G\right\}
@@ -322,10 +407,31 @@ The group $A_5$ is simple.
 
 \begin{proof}
 We want to show that the only normal subgroups of $A_5$ are $\{(1)\}$ and $A_5$. There are five conjugancy classes in in $A_5$:
-
+\begin{center}
+  \begin{tabular}{ | c || c | c | c | c | c |}
+    \hline
+    Rep. & (1) & (12345) & (21345) & (12)(34) & (123) \\ \hline
+    Size & 1 & 12 & 12 & 15 & 20 \\ 
+    \hline
+  \end{tabular}
+\end{center}
 
 If $A_5$ has a normal subgroup $N$, then $N$ is the union of conjugancy classes whose total size divides 60. However, no sum of the above numbers which include 1 is a factor of 60 except for 1 and 60. Therefore, $N$ is trivial or $A_5$.
 \end{proof}
+
+\begin{lemma}
+When $n\geq 5$, any $\sigma \neq \iota$ in $A_n$ has a conjugate $\sigma'\neq\sigma$ such that $\sigma(i)=\sigma'(i)$ for some $i$.  
+\end{lemma}
+\begin{proof}
+% proof taken verbatim from https://kconrad.math.uconn.edu/blurbs/grouptheory/Ansimple.pdf
+Let $\sigma$ be a non-identity element of $A_n$ Let $r$ be the longest lenght of a disjoint cycle in $\sigma$. Relabelling we may write
+\begin{equation}
+\sigma = (12\cdots r)\pi, 
+\end{equation}
+where $r$ and $\pi$ are disjoint. If $r\geq 3$, let $\tau = (345)$ and $\sigma'=\tau\sigma\tau^{-1}$. Then $\sigma(1)=2$, $\sigma'(1)=2$, $\sigma(2)=3$ and $\sigma'(2)=4$. Thus $\sigma'\neq\sigma$ and both take the same value at 1. If $r=2$, then $\sigma$ is a product of disjoint transpositions. If there are at least 3 disjoint propositions involved, then $n\geq 6$ and we may write $\sigma = (12)(34)(56)(\cdots)$ after relabelling. Let $\tau=(12)(35)$ and $\sigma'=\tau\sigma\tau^{-1}$. Then $\sigma(1)=2$, $\sigma'(1)=2$, $\sigma(3) = 4$ and $\sigma'(3) = 6$. Again we see $\sigma'\neq \sigma$ and $\sigma$ and $\sigma'$ have the same value at 1. If $r=2$ and $\sigma$ is a product of 2 disjoint tranpositions write $\sigma = (12)(34)$ after relabelling. Let $\tau = (132)$ and $\sigma'=\tau\sigma\tau^{-1}=(13)(24)$. Then $\sigma'\neq \sigma$ and both fix 5.
+
+\end{proof}
+
 
 \begin{theorem}
 For $n\geq 5$, the group $A_n$ is simple. 
